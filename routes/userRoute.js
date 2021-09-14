@@ -17,7 +17,7 @@ router.post("/login", userController.login_user);
 //deleting user account and data related to attendee
 //JWT token is must, user id is populated from JWT token
 router.delete(
-  "/delete",
+  "/deleteuser",
   jwtAuthenticator.require_authentication,
   userController.delete_user
 );

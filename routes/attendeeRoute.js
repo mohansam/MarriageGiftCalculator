@@ -6,7 +6,7 @@ const jwtAuthenticator = require("../middelware/jwtAuthenticator");
 // Getting all attendee
 //JWT token is must, user id is populated from JWT token
 router.get(
-  "/",
+  "/getattendee",
   jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.get_all_attendee
@@ -16,7 +16,7 @@ router.get(
 //JWT token is must, user id is populated from JWT token
 //body: {AttendeeName,AttendeeAmount,AttendeeCity}
 router.post(
-  "/",
+  "/createattendee",
   jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.create_new_attendee
@@ -26,7 +26,7 @@ router.post(
 //JWT token is must, user id is populated from JWT token
 //body: {AttendeeName,AttendeeAmount,AttendeeCity,AttendeeId}
 router.patch(
-  "/",
+  "/updateattendee",
   jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.get_one_attendee,
@@ -37,7 +37,7 @@ router.patch(
 //JWT token is must, user id is populated from JWT token
 //body{AttendeeId}
 router.delete(
-  "/",
+  "/deleteattendee",
   jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.delete_one_attendee
