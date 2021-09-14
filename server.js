@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 
 const express = require("express");
 const app = express();
@@ -11,9 +12,13 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
 
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.send("hi");
-});
+
+app
+  .use(express.static(path.join(__dirname, "public")))
+  .set("views", path.join(__dirname, "views"))
+  .set("view engine", "ejs")
+  .get("/", (req, res) => res.render("pages/index"));
+
 const userRoute = require("./routes/userRoute");
 app.use("/api/user", userRoute);
 
