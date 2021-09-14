@@ -4,7 +4,7 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const port = process.env.port;
+const PORT = process.env.PORT || 5000;
 const DATABASE_URL =
   "mongodb+srv://Mohan:1234@marriagecalculator.u1ox4.mongodb.net/UserDatabase?retryWrites=true&w=majority";
 
@@ -27,6 +27,6 @@ app.use("/api/user", userRoute);
 const attendeeRoute = require("./routes/attendeeRoute");
 app.use("/api/attendee", attendeeRoute);
 
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server listening at http://localhost:${PORT}`);
 });
