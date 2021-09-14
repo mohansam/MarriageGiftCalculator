@@ -5,3 +5,19 @@ module.exports.jwt_token_generator = (id) => {
     expiresIn: maxAge,
   });
 };
+
+module.exports.require_authentication = (req, res, next) => {
+  const jwtToken = req.cookies.jwt;
+  if (jwtToken) {
+    jwt.verify(jwtToken, process.env.JWTSECRECT, (err, decodedToken) => {
+      if (err) {
+        return res.status(401).json({ message: "invalid token" });
+      } else {
+        req.params.userId = decodedToken.id;
+        next();
+      }
+    });
+  } else {
+    return res.status(401).json({ message: " not a valid JWT" });
+  }
+};

@@ -1,24 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const attendeeController = require("../controller/attendeeController");
+const jwtAuthenticator = require("../middelware/jwtAuthenticator");
 
 // Getting all attendee
 router.get(
-  "/:userId",
+  "/",
+  jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.get_all_attendee
 );
 
 // Creating new attendee
 router.post(
-  "/:userId",
+  "/",
+  jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.create_new_attendee
 );
 
 // Updating One attendee
 router.patch(
-  "/:userId",
+  "/",
+  jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.get_one_attendee,
   attendeeController.update_one_attendee
@@ -26,7 +30,8 @@ router.patch(
 
 // Deleting one attendee
 router.delete(
-  "/:userId",
+  "/",
+  jwtAuthenticator.require_authentication,
   attendeeController.verify_user_id,
   attendeeController.delete_one_attendee
 );
