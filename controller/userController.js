@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const Attendee = require("../models/attendeeModel");
-
+const jwtAuthenticator = require("../middelware/jwtAuthenticator");
+const maxAge = 3 * 24 * 60 * 60;
 //get all the users
 module.exports.get_user = async (req, res) => {
   try {
@@ -20,7 +21,13 @@ module.exports.signup_user = async (req, res) => {
   });
   try {
     const newUser = await user.save();
-    res.status(201).json(newUser);
+    const jwtToken = jwtAuthenticator.jwt_token_generator(newUser._id);
+    res.cookie("jwt", jwtToken, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(201).json({
+      UserId: newUser._id,
+      UserName: newUser.UserName,
+      UserEmail: newUser.UserEmail,
+    });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -32,7 +39,15 @@ module.exports.login_user = async (req, res) => {
     const user = await User.findOne({ UserEmail: req.body.UserEmail });
     if (user != null) {
       if (req.body.UserPwd == user.UserPwd) {
-        res.status(200).json(user);
+        const jwtToken = jwtAuthenticator.jwt_token_generator(user._id);
+        res.cookie("jwt", jwtToken, { httpOnly: true, maxAge: maxAge * 1000 });
+        res
+          .status(200)
+          .json({
+            UserId: user._id,
+            UserName: user.UserName,
+            UserEmail: user.UserEmail,
+          });
       } else {
         res.status(401).json({ message: "user id or pwd incorrect" });
       }
