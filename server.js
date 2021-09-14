@@ -1,11 +1,11 @@
 require("dotenv").config();
-const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
 //middelware
 app.use(express.json());
 app.use(cookieParser());
@@ -15,12 +15,9 @@ mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
-
-app
-  .use(express.static(path.join(__dirname, "public")))
-  .set("views", path.join(__dirname, "views"))
-  .set("view engine", "ejs")
-  .get("/", (req, res) => res.render("pages/index"));
+app.get("/", (req, res) => {
+  res.json({ message: "this app is used to calculate " });
+});
 
 const userRoute = require("./routes/userRoute");
 app.use("/api/user", userRoute);
