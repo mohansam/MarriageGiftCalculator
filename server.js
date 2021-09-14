@@ -11,7 +11,9 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
 
 app.use(express.json());
-
+app.get("/", (req, res) => {
+  res.send("hi");
+});
 const userRoute = require("./routes/userRoute");
 app.use("/api/user", userRoute);
 
