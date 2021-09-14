@@ -18,6 +18,10 @@ app.use("/api/user", userRoute);
 const attendeeRoute = require("./routes/attendeeRoute");
 app.use("/api/attendee", attendeeRoute);
 
+app.get("/", (req, res) => {
+  res.send("hi");
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
