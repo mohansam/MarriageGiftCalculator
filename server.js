@@ -1,12 +1,14 @@
-require("dotenv").config();
+//require("dotenv").config();
 const path = require("path");
 
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const port = process.env.port || 8000;
+const DATABASE_URL =
+  "mongodb+srv://Mohan:1234@marriagecalculator.u1ox4.mongodb.net/UserDatabase?retryWrites=true&w=majority";
 
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+mongoose.connect(DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
