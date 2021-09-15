@@ -1,0 +1,79 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="\style.css">
+</head>
+
+<body>
+    <nav>
+        <h1><a href="/">Ninja Smoothies</a></h1>
+        <ul>
+            <li><a href="/logout">Log out</a></li>
+            <li><a href="/login">Log in</a></li>
+            <li><a href="/signup" class="btn">Sign up</a></li>
+
+        </ul>
+    </nav>
+
+    <form action="/signup">
+        <h2>Sign up</h2>
+        <label for="username">UserName</label>
+        <input type="text" name="username" required />
+        <label for="email">Email</label>
+        <input type="text" name="email" required />
+        <div class="email error"></div>
+        <label for="password">Password</label>
+        <input type="password" name="password" required />
+        <div class="password error"></div>
+        <button>Sign up</button>
+    </form>
+
+    <footer>Copyright 2020 Ninja Smoothies</footer>
+
+</body>
+
+</html>
+
+<script>
+    const form = document.querySelector('form');
+    const emailError = document.querySelector('.email.error');
+    const passwordError = document.querySelector('.password.error');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+
+        // reset errors
+        emailError.textContent = '';
+        passwordError.textContent = '';
+
+        // get values
+        const UserName = form.username.value;
+        const UserEmail = form.email.value;
+        const UserPwd = form.password.value;
+
+        try {
+            const res = await fetch('api/user/signup', {
+                method: 'POST',
+                body: JSON.stringify({ UserName, UserEmail, UserPwd }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
+            if (data.errors) {
+                emailError.textContent = data.errors.email;
+                passwordError.textContent = data.errors.password;
+            }
+               location.assign('api/attendee/getattendee');
+            
+
+        }
+        catch (err) {
+            console.log(err);
+        }
+
+    });
+</script>

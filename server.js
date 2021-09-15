@@ -2,7 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const helpData = require("./puplic/helpData");
+const helpData = require("./public/helpData");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 5000;
 //middelware
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static("public"));
 
 //db connection
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
@@ -23,7 +25,9 @@ app.get("/", (req, res) => {
     .status(200)
     .json({ message: "this app is used to calculate marriage gift amount" });
 });
-
+app.get("/signup", (req, res) => {
+  res.sendFile(path.join(__dirname + "/public/signup.html"));
+});
 //help route
 app.get("/help", (req, res) => {
   res.status(200).json(helpData);
