@@ -37,6 +37,11 @@ app.use("/api/user", userRoute);
 const attendeeRoute = require("./routes/attendeeRoute");
 app.use("/api/attendee", attendeeRoute);
 
+//to handle unwanted route
+app.use((req, res) => {
+  res.status(404).json({ message: "endpoint not available" });
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });
