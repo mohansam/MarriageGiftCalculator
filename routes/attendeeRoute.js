@@ -8,7 +8,6 @@ const jwtAuthenticator = require("../middelware/jwtAuthenticator");
 router.get(
   "/getattendee",
   jwtAuthenticator.require_authentication,
-  attendeeController.verify_user_id,
   attendeeController.get_all_attendee
 );
 
@@ -18,7 +17,6 @@ router.get(
 router.post(
   "/createattendee",
   jwtAuthenticator.require_authentication,
-  attendeeController.verify_user_id,
   attendeeController.create_new_attendee
 );
 
@@ -28,7 +26,6 @@ router.post(
 router.patch(
   "/updateattendee",
   jwtAuthenticator.require_authentication,
-  attendeeController.verify_user_id,
   attendeeController.get_one_attendee,
   attendeeController.update_one_attendee
 );
@@ -39,7 +36,6 @@ router.patch(
 router.delete(
   "/deleteattendee",
   jwtAuthenticator.require_authentication,
-  attendeeController.verify_user_id,
   attendeeController.delete_one_attendee
 );
 
