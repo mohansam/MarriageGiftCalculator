@@ -25,9 +25,7 @@ app.get("/", (req, res) => {
     .status(200)
     .json({ message: "this app is used to calculate marriage gift amount" });
 });
-app.get("/signup", (req, res) => {
-  res.sendFile(path.join(__dirname + "/public/signup.html"));
-});
+
 //help route
 app.get("/help", (req, res) => {
   res.status(200).json(helpData);
