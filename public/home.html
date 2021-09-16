@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MarriageGiftCalculator</title>
+    <script>
+        var cookieValue = document.cookie.split(" ")[0];
+        definedCookie = 'loggedinstatus=true';
+        if(definedCookie.localeCompare(cookieValue)!=0){
+            location.assign("login.html");
+        }
+    </script>
     <link rel="stylesheet" href="\style.css">
 </head>
 

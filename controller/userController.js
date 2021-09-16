@@ -23,6 +23,7 @@ module.exports.signup_user = async (req, res) => {
     const newUser = await user.save();
     const jwtToken = jwtAuthenticator.jwt_token_generator(newUser._id);
     res.cookie("jwt", jwtToken, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.cookie("loggedinstatus", "true", { maxAge: maxAge * 1000 });
     res.status(201).json({
       UserId: newUser._id,
       UserName: newUser.UserName,
@@ -41,6 +42,7 @@ module.exports.login_user = async (req, res) => {
       if (req.body.UserPwd == user.UserPwd) {
         const jwtToken = jwtAuthenticator.jwt_token_generator(user._id);
         res.cookie("jwt", jwtToken, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.cookie("loggedinstatus", "true", { maxAge: maxAge * 1000 });
         res.status(200).json({
           UserId: user._id,
           UserName: user.UserName,
@@ -77,5 +79,6 @@ module.exports.delete_user = async (req, res) => {
 //logout user
 module.exports.logout_user = async (req, res) => {
   res.cookie("jwt", " ", { maxAge: 1 });
+  res.cookie("loggedinstatus", "true", { maxAge: 1 });
   res.status(200).json({ message: "looged out" });
 };
