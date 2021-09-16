@@ -41,13 +41,11 @@ module.exports.login_user = async (req, res) => {
       if (req.body.UserPwd == user.UserPwd) {
         const jwtToken = jwtAuthenticator.jwt_token_generator(user._id);
         res.cookie("jwt", jwtToken, { httpOnly: true, maxAge: maxAge * 1000 });
-        res
-          .status(200)
-          .json({
-            UserId: user._id,
-            UserName: user.UserName,
-            UserEmail: user.UserEmail,
-          });
+        res.status(200).json({
+          UserId: user._id,
+          UserName: user.UserName,
+          UserEmail: user.UserEmail,
+        });
       } else {
         res.status(401).json({ message: "user id or pwd incorrect" });
       }
@@ -74,4 +72,10 @@ module.exports.delete_user = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err });
   }
+};
+
+//logout user
+module.exports.logout_user = async (req, res) => {
+  res.cookie("jwt", " ", { maxAge: 1 });
+  res.status(200).json({ message: "looged out" });
 };

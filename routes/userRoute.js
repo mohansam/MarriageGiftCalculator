@@ -22,4 +22,11 @@ router.delete(
   userController.delete_user
 );
 
+//looging out user account and data related to attendee
+//JWT token is must, user id is populated from JWT token
+router.get(
+  "/logout",
+  jwtAuthenticator.require_authentication,
+  userController.logout_user
+);
 module.exports = router;
