@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
 const helpData = require("./public/helpData");
 const path = require("path");
 
@@ -9,6 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 //middelware
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static("public"));
