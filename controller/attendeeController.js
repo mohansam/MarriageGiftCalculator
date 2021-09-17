@@ -83,3 +83,23 @@ module.exports.delete_one_attendee = async (req, res) => {
     res.status(500).json({ message: err });
   }
 };
+
+//
+module.exports.user_total_amount = async (req, res) => {
+  try {
+    const totalAmount = await Attendee.aggregate([
+      { $match: { AttendeeUser: req.params.userId } },
+      {
+        $group: {
+          _id: null,
+          userTotalAmount: { $sum: "$AttendeeAmount" },
+        },
+      },
+    ]);
+    if (totalAmount.length == 0)
+      return res.status(200).json({ totalAmount: 0 });
+    res.status(200).json({ totalAmount: totalAmount[0].userTotalAmount });
+  } catch (err) {
+    res.status(500).json({ message: "some internal server error" });
+  }
+};

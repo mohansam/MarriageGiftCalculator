@@ -39,4 +39,12 @@ router.delete(
   attendeeController.delete_one_attendee
 );
 
+//// sum total amount
+//JWT token is must, user id is populated from JWT token
+router.get(
+  "/totalAmount",
+  jwtAuthenticator.require_authentication,
+  attendeeController.user_total_amount
+);
+
 module.exports = router;
