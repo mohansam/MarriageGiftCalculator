@@ -42,9 +42,24 @@ router.delete(
 //// sum total amount
 //JWT token is must, user id is populated from JWT token
 router.get(
-  "/totalAmount",
+  "/totalamount",
   jwtAuthenticator.require_authentication,
   attendeeController.user_total_amount
+);
+// serach attendde by name
+//JWT token is must, user id is populated from JWT token
+router.get(
+  "/searchattendeename",
+  jwtAuthenticator.require_authentication,
+  attendeeController.search_attendee_name
+);
+
+// serach attendde by city
+//JWT token is must, user id is populated from JWT token
+router.get(
+  "/searchattendeecity",
+  jwtAuthenticator.require_authentication,
+  attendeeController.search_attendee_city
 );
 
 module.exports = router;

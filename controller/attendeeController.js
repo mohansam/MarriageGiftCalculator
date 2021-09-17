@@ -103,3 +103,28 @@ module.exports.user_total_amount = async (req, res) => {
     res.status(500).json({ message: "some internal server error" });
   }
 };
+
+//search attendee by name
+module.exports.search_attendee_name = async (req, res) => {
+  var searchUserName = req.query.userName;
+  if (!searchUserName) {
+    return res.status(200).json({ message: "no userinput" });
+  }
+  const searchRegx = new RegExp(`^${searchUserName}`, "gi");
+  const searchValue = await Attendee.find({
+    AttendeeUser: req.params.userId,
+    AttendeeName: { $regex: searchRegx },
+  });
+  res.status(200).json(searchValue);
+};
+
+//search attendee by city
+module.exports.search_attendee_city = async (req, res) => {
+  var searchUserCity = req.query.userCity;
+  const searchRegx = new RegExp(`^${searchUserCity}`, "gi");
+  const searchValue = await Attendee.find({
+    AttendeeUser: req.params.userId,
+    AttendeeCity: { $regex: searchRegx },
+  });
+  res.status(200).json(searchValue);
+};
