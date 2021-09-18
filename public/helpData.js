@@ -60,7 +60,7 @@ module.exports.helpData = [
       {
         "deleteattendee end point": [
           "method-Patch",
-          "body-[AttendeeId]",
+          "body-[AttendeeID]",
           "Cookie-jwt(user id is populated from Cookie)",
         ],
       },
