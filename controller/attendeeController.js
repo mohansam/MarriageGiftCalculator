@@ -1,7 +1,8 @@
 const User = require("../models/userModel");
 const Attendee = require("../models/attendeeModel");
+const inputValidator = require("../middelware/inputValidator");
 
-//verifying userid
+//verifying userid this function not used
 module.exports.verify_user_id = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -15,72 +16,113 @@ module.exports.verify_user_id = async (req, res, next) => {
 };
 
 //getting one attendee
-module.exports.get_one_attendee = async (req, res, next) => {
-  let attendee;
-  try {
-    attendee = await Attendee.findById(req.body.AttendeeId);
-    if (attendee == null) {
-      return res.status(404).json({ message: "Cannot find attendee" });
-    }
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
+get_one_attendee = async (req, res) => {
+  const attendee = await Attendee.find({
+    AttendeeUser: req.params.userId,
+    _id: req.body.AttendeeId,
+  });
+  if (attendee != null) {
+    return attendee[0];
   }
-
-  res.attendee = attendee;
-  next();
+  err = JSON.stringify({
+    type: "m",
+    statusCode: 404,
+    errors: [{ msg: "attendeeId not found" }],
+  });
+  throw Error(err);
 };
 
 // Getting all the attendee
 module.exports.get_all_attendee = async (req, res) => {
   try {
-    const attendee = await Attendee.find({ AttendeeUser: req.params.userId });
+    const attendee = await Attendee.find(
+      { AttendeeUser: req.params.userId },
+      {
+        _id: true,
+        AttendeeName: true,
+        AttendeeCity: true,
+        AttendeeAmount: true,
+      }
+    );
     res.status(200).json(attendee);
   } catch (err) {
-    res.status(500).json({ message1: err });
+    inputValidator.error_handler(err, req, res);
   }
 };
 
 //Creating new attendee
 module.exports.create_new_attendee = async (req, res) => {
-  const attendee = new Attendee({
-    AttendeeName: req.body.AttendeeName,
-    AttendeeAmount: req.body.AttendeeAmount,
-    AttendeeCity: req.body.AttendeeCity,
-    AttendeeUser: req.params.userId,
-  });
   try {
-    const newAttendee = await attendee.save();
-    res.status(201).json(newAttendee);
+    const err = await inputValidator.error_validation(
+      req,
+      res,
+      inputValidator.attendee_creation_validation
+    );
+    if (!err) {
+      const attendee = new Attendee({
+        AttendeeName: req.body.AttendeeName,
+        AttendeeAmount: req.body.AttendeeAmount,
+        AttendeeCity: req.body.AttendeeCity,
+        AttendeeUser: req.params.userId,
+      });
+      const { AttendeeName, AttendeeAmount, AttendeeCity, _id } =
+        await attendee.save();
+      res.status(201).json({ AttendeeName, AttendeeAmount, AttendeeCity, _id });
+    }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    inputValidator.error_handler(err, req, res);
   }
 };
 
 //Updating one attendee
 module.exports.update_one_attendee = async (req, res) => {
-  res.attendee.AttendeeName = req.body.AttendeeName;
-  res.attendee.AttendeeAmount = req.body.AttendeeAmount;
-  res.attendee.AttendeeCity = req.body.AttendeeCity;
   try {
-    const updateUser = await res.attendee.save();
-    res.status(200).json(updateUser);
+    const inputValidationError = await inputValidator.error_validation(
+      req,
+      res,
+      inputValidator.update_attendee_validation
+    );
+    if (!inputValidationError) {
+      var attendee = await get_one_attendee(req, res);
+      attendee.AttendeeName = req.body.AttendeeName;
+      attendee.AttendeeAmount = req.body.AttendeeAmount;
+      attendee.AttendeeCity = req.body.AttendeeCity;
+      const { AttendeeName, AttendeeAmount, AttendeeCity, _id } =
+        await attendee.save();
+      res.status(200).json({ AttendeeName, AttendeeAmount, AttendeeCity, _id });
+    }
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    inputValidator.error_handler(err, req, res);
   }
 };
 
-//deleting one user and attendees related to that users
-//this just example
+//deleting one attendees related to that users
+//
 module.exports.delete_one_attendee = async (req, res) => {
   try {
-    const { deletedCount } = await Attendee.deleteMany({
-      _id: req.body.AttendeeId,
-    });
-    if (deletedCount <= 0)
-      return res.status(404).json({ message: "attendee not found" });
-    res.status(200).json({ message: `${deletedCount} attendee deleted` });
+    const inputValidationError = await inputValidator.error_validation(
+      req,
+      res,
+      inputValidator.delete_attendee_validation
+    );
+    if (!inputValidationError) {
+      const { deletedCount } = await Attendee.deleteMany({
+        _id: req.body.AttendeeId,
+        AttendeeUser: req.params.userId,
+      });
+      if (deletedCount >= 1)
+        return res
+          .status(200)
+          .json({ message: `${deletedCount} attendee deleted` });
+      err = JSON.stringify({
+        type: "m",
+        statusCode: 404,
+        errors: [{ msg: "attendee not found" }],
+      });
+      throw Error(err);
+    }
   } catch (err) {
-    res.status(500).json({ message: err });
+    inputValidator.error_handler(err, req, res);
   }
 };
 
@@ -100,31 +142,66 @@ module.exports.user_total_amount = async (req, res) => {
       return res.status(200).json({ totalAmount: 0 });
     res.status(200).json({ totalAmount: totalAmount[0].userTotalAmount });
   } catch (err) {
-    res.status(500).json({ message: "some internal server error" });
+    inputValidator.error_handler(err, req, res);
   }
 };
 
 //search attendee by name
 module.exports.search_attendee_name = async (req, res) => {
-  var searchUserName = req.query.userName;
-  if (!searchUserName) {
-    return res.status(200).json({ message: "no userinput" });
+  try {
+    const inputValidationError = await inputValidator.error_validation(
+      req,
+      res,
+      inputValidator.search_attendee_name_validation
+    );
+    if (!inputValidationError) {
+      var searchAttendeeName = req.query.AttendeeName;
+      const searchRegx = new RegExp(`^${searchAttendeeName}`, "gi");
+      const searchValue = await Attendee.find(
+        {
+          AttendeeUser: req.params.userId,
+          AttendeeName: { $regex: searchRegx },
+        },
+        {
+          _id: true,
+          AttendeeName: true,
+          AttendeeCity: true,
+          AttendeeAmount: true,
+        }
+      );
+      res.status(200).json(searchValue);
+    }
+  } catch (err) {
+    inputValidator.error_handler(err, req, res);
   }
-  const searchRegx = new RegExp(`^${searchUserName}`, "gi");
-  const searchValue = await Attendee.find({
-    AttendeeUser: req.params.userId,
-    AttendeeName: { $regex: searchRegx },
-  });
-  res.status(200).json(searchValue);
 };
 
 //search attendee by city
 module.exports.search_attendee_city = async (req, res) => {
-  var searchUserCity = req.query.userCity;
-  const searchRegx = new RegExp(`^${searchUserCity}`, "gi");
-  const searchValue = await Attendee.find({
-    AttendeeUser: req.params.userId,
-    AttendeeCity: { $regex: searchRegx },
-  });
-  res.status(200).json(searchValue);
+  try {
+    const inputValidationError = await inputValidator.error_validation(
+      req,
+      res,
+      inputValidator.search_attendee_city_validation
+    );
+    if (!inputValidationError) {
+      var searchAttendeeCity = req.query.AttendeeCity;
+      const searchRegx = new RegExp(`^${searchAttendeeCity}`, "gi");
+      const searchValue = await Attendee.find(
+        {
+          AttendeeUser: req.params.userId,
+          AttendeeCity: { $regex: searchRegx },
+        },
+        {
+          _id: true,
+          AttendeeName: true,
+          AttendeeCity: true,
+          AttendeeAmount: true,
+        }
+      );
+      res.status(200).json(searchValue);
+    }
+  } catch (err) {
+    inputValidator.error_handler(err, req, res);
+  }
 };

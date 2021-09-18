@@ -9,19 +9,11 @@ router.get("/users", userController.get_user);
 
 //creating new user
 //body {UserName,UserEmail,UserPwd}
-router.post(
-  "/signup",
-  inputValidator.signup_validation,
-  userController.signup_user
-);
+router.post("/signup", userController.signup_user);
 
 //login
 //body {UserEmail,UserPwd}
-router.post(
-  "/login",
-  inputValidator.login_validation,
-  userController.login_user
-);
+router.post("/login", userController.login_user);
 
 //deleting user account and data related to attendee
 //JWT token is must, user id is populated from JWT token

@@ -26,7 +26,6 @@ router.post(
 router.patch(
   "/updateattendee",
   jwtAuthenticator.require_authentication,
-  attendeeController.get_one_attendee,
   attendeeController.update_one_attendee
 );
 

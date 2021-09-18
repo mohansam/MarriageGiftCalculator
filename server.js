@@ -2,16 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const helpData = require("./public/helpData");
-const path = require("path");
-
+const inputValidator = require(".//middelware/inputValidator");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 //middelware
 
-app.use(express.json());
+app.use(express.json({ strict: true }));
 app.use(cookieParser());
 app.use(express.static("public"));
 
@@ -44,6 +42,11 @@ app.use("/api/attendee", attendeeRoute);
 //to handle unwanted route
 app.use((req, res) => {
   res.status(404).json({ message: "endpoint not available" });
+});
+
+//to handle error
+app.use(function (err, req, res, next) {
+  inputValidator.error_handler(err, req, res);
 });
 
 app.listen(PORT, () => {

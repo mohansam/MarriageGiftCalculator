@@ -17,7 +17,11 @@ module.exports.get_user = async (req, res) => {
 //create new user
 module.exports.signup_user = async (req, res) => {
   try {
-    const err = await inputValidator.error_validation(req, res);
+    const err = await inputValidator.error_validation(
+      req,
+      res,
+      inputValidator.signup_validation
+    );
     if (!err) {
       const user = new User({
         UserName: req.body.UserName,
@@ -41,7 +45,11 @@ module.exports.signup_user = async (req, res) => {
 //user login
 module.exports.login_user = async (req, res) => {
   try {
-    const err = await inputValidator.error_validation(req, res);
+    const err = await inputValidator.error_validation(
+      req,
+      res,
+      inputValidator.login_validation
+    );
     if (!err) {
       const user = await User.login(req.body.UserEmail, req.body.UserPwd);
       const jwtToken = jwtAuthenticator.jwt_token_generator(user._id);
