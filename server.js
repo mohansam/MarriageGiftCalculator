@@ -33,11 +33,11 @@ app.get("/help", (req, res) => {
 
 //user route
 const userRoute = require("./routes/userRoute");
-app.use("/api/user", userRoute);
+app.use("/api/v1/user", userRoute);
 
 //attendeeRoute
 const attendeeRoute = require("./routes/attendeeRoute");
-app.use("/api/attendee", attendeeRoute);
+app.use("/api/v1/attendee", attendeeRoute);
 
 //to handle unwanted route
 app.use((req, res) => {
