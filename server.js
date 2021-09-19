@@ -41,7 +41,17 @@ app.use("/api/v1/attendee", attendeeRoute);
 
 //to handle unwanted route
 app.use((req, res) => {
-  res.status(404).json({ message: "endpoint not available" });
+  try {
+    throw Error(
+      JSON.stringify({
+        type: "m",
+        statusCode: 404,
+        errors: [{ msg: "end point not available" }],
+      })
+    );
+  } catch (err) {
+    inputValidator.error_handler(err, req, res);
+  }
 });
 
 //to handle error

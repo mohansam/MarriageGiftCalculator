@@ -39,15 +39,16 @@ UserSchema.statics.login = async function (email, password) {
     err = JSON.stringify({
       statusCode: 401,
       type: "m",
-      errors: [{ msg: "incorrect password" }],
+      errors: [{ msg: "incorrect password", param: "UserPwd" }],
+    });
+    throw Error(err);
+  } else {
+    err = JSON.stringify({
+      type: "m",
+      statusCode: 400,
+      errors: [{ msg: "email id dosen't exists", param: "UserEmail" }],
     });
     throw Error(err);
   }
-  err = JSON.stringify({
-    type: "m",
-    statusCode: 400,
-    errors: [{ msg: "incorrect email" }],
-  });
-  throw Error(err);
 };
 module.exports = mongoose.model("user", UserSchema);

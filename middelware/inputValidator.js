@@ -167,7 +167,7 @@ module.exports.error_handler = (err, req, res) => {
     err = JSON.stringify({
       type: "m",
       statusCode: 400,
-      errors: [{ msg: "Email id already exists" }],
+      errors: [{ msg: "Email id already exists", param: "UserEmail" }],
     });
   //check for JSON paser error
   if (err.includes("Unexpected string in JSON"))
@@ -179,9 +179,9 @@ module.exports.error_handler = (err, req, res) => {
   //check for validation failed error
   if (err.includes("type")) {
     err = JSON.parse(err);
-    return res.status(err.statusCode).json(err.errors);
+    return res.status(err.statusCode).json({ error: err.errors });
   }
   //to handle server error
   console.log(err);
-  res.status(500).json([{ msg: "something broke" }]);
+  res.status(500).json({ error: [{ msg: "something broke" }] });
 };
