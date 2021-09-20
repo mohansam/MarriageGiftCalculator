@@ -3,23 +3,24 @@
 
   /*==================================================================
     [ Validate ]*/
-  var input = $(".validate-input .input100");
+  var input = $("#loginValidator").children();
   $("#loginForm").on("submit", function (e) {
     e.preventDefault();
     var check = true;
-
+    disbaleLoginButton();
     for (var i = 0; i < input.length; i++) {
-      if (validate(input[i]) == false) {
-        showValidate(input[i]);
+      if (validate(input[i].firstElementChild) == false) {
+        showValidate(input[i].firstElementChild);
         check = false;
       }
     }
+
     if (check) {
       check = doLogin();
     }
   });
 
-  $(".validate-form .input100").each(function () {
+  $("#loginValidator .input100").each(function () {
     $(this).focus(function () {
       hideValidate(this);
     });
@@ -50,14 +51,23 @@
       $(thisAlert).attr("data-validate", errorMessage);
     }
     $(thisAlert).addClass("alert-validate");
+    disbaleLoginButton();
   }
 
   function hideValidate(input) {
     var thisAlert = $(input).parent();
-
+    enableLoginButton();
     $(thisAlert).removeClass("alert-validate");
   }
 
+  function disbaleLoginButton() {
+    $("#loginButton").removeClass("login_hover");
+    $("#loginButton").attr("disabled", true);
+  }
+  function enableLoginButton() {
+    $("#loginButton").addClass("login_hover");
+    $("#loginButton").attr("disabled", false);
+  }
   //function post login
   async function doLogin() {
     var UserEmail = $("#loginUserEmail").val();
@@ -87,4 +97,9 @@
       console.log(err);
     }
   }
+  $("#loginToSignup").on("click", () => {
+    document.querySelector("#loginPage").hidden = true;
+    document.querySelector("#signupPage").hidden = false;
+    console.log("hi 2");
+  });
 })(jQuery);

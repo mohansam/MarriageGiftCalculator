@@ -377,11 +377,13 @@ iframe {
   -moz-transition: all 0.4s;
   transition: all 0.4s;
 }
-
-.login100-form-btn:hover {
+.login_hover:hover {
   background: #333333;
 }
-
+.login100-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 /*------------------------------------------------------------------
 [ Responsive ]*/
 
