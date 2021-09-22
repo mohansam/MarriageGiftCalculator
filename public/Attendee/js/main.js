@@ -41,9 +41,11 @@
 									</td>`;
     var editId = `#${input._id} .edit`;
     var deleteId = `#${input._id} .delete`;
-    $(editId).on("click", editUserPopulateTable);
-    $(deleteId).on("click", () => {
-      console.log("delete");
+    $(editId).on("click", (event) => {
+      editUserPopulateTable(event.target);
+    });
+    $(deleteId).on("click", (event) => {
+      deleteUserPopulateTable(event.target);
     });
   }
 
@@ -70,19 +72,22 @@
     }
   }
 
-  function editUserPopulateTable() {
-    console.log("hi");
-    var editUserName = document.querySelector(
+  function editUserPopulateTable(ele) {
+    var row = ele.parentElement.parentElement.parentElement;
+    document.querySelector(
       "#editEmployeeModal > div > div > form > div:nth-child(1) > input"
-    );
-    var editUserAmount = document.querySelector(
+    ).value = row.children[0].innerText;
+    document.querySelector(
       "#editEmployeeModal > div > div > form > div:nth-child(2) > input"
-    );
-    var editUserCity = document.querySelector(
+    ).value = row.children[1].innerText;
+    document.querySelector(
       "#editEmployeeModal > div > div > form > div:nth-child(3) > input"
-    );
-    editUserName.value = "Sam";
-    editUserAmount = 100;
-    editUserCity = "tut";
+    ).value = row.children[2].innerText;
+  }
+  function deleteUserPopulateTable(ele) {
+    var row = ele.parentElement.parentElement.parentElement;
+    document.querySelector(
+      "#deleteEmployeeModal > div > div > div:nth-child(1) > h4"
+    ).innerText = `Delete ${row.children[0].innerText}`;
   }
 })(jQuery);

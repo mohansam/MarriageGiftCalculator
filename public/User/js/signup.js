@@ -16,7 +16,7 @@
     }
 
     if (check) {
-      check = doLogin();
+      check = doSignup();
     }
   });
 
@@ -69,20 +69,21 @@
     $("#signupButton").attr("disabled", false);
   }
   //function post login
-  async function doLogin() {
+  async function doSignup() {
     var UserName = $("#signupUserName").val();
     var UserEmail = $("#signupUserEmail").val();
     var UserPwd = $("#signupUserPwd").val();
-    $("#loginLoader").addClass("lds-ellipsis");
+    $("#signupLoader").addClass("lds-ellipsis");
     console.log({ UserEmail, UserPwd });
+    const URI = window.origin + "/api/v1/user/signup";
     try {
-      const res = await fetch("api/v1/user/signup", {
+      const res = await fetch(URI, {
         method: "POST",
         body: JSON.stringify({ UserName, UserEmail, UserPwd }),
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
-      $("#loginLoader").removeClass("lds-ellipsis");
+      $("#signupLoader").removeClass("lds-ellipsis");
       console.log(data);
       if (data.error) {
         const postError = data.error;
