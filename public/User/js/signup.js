@@ -3,8 +3,8 @@
 
   /*==================================================================
     [ Validate ]*/
-  var input = $("#loginValidator").children();
-  $("#loginForm").on("submit", function (e) {
+  var input = $("#signupValidator").children();
+  $("#signupForm").on("submit", function (e) {
     e.preventDefault();
     var check = true;
     disbaleLoginButton();
@@ -20,7 +20,7 @@
     }
   });
 
-  $("#loginValidator .input100").each(function () {
+  $("#signupValidator .input100").each(function () {
     $(this).focus(function () {
       hideValidate(this);
     });
@@ -61,23 +61,24 @@
   }
 
   function disbaleLoginButton() {
-    $("#loginButton").removeClass("login_hover");
-    $("#loginButton").attr("disabled", true);
+    $("#signupButton").removeClass("login_hover");
+    $("#signupButton").attr("disabled", true);
   }
   function enableLoginButton() {
-    $("#loginButton").addClass("login_hover");
-    $("#loginButton").attr("disabled", false);
+    $("#signupButton").addClass("login_hover");
+    $("#signupButton").attr("disabled", false);
   }
   //function post login
   async function doLogin() {
-    var UserEmail = $("#loginUserEmail").val();
-    var UserPwd = $("#loginUserPwd").val();
+    var UserName = $("#signupUserName").val();
+    var UserEmail = $("#signupUserEmail").val();
+    var UserPwd = $("#signupUserPwd").val();
     $("#loginLoader").addClass("lds-ellipsis");
     console.log({ UserEmail, UserPwd });
     try {
-      const res = await fetch("api/v1/user/login", {
+      const res = await fetch("api/v1/user/signup", {
         method: "POST",
-        body: JSON.stringify({ UserEmail, UserPwd }),
+        body: JSON.stringify({ UserName, UserEmail, UserPwd }),
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
@@ -86,20 +87,21 @@
       if (data.error) {
         const postError = data.error;
         postError.forEach((element) => {
-          var elementName = `#login${element.param}`;
+          var elementName = `#signup${element.param}`;
           console.log(elementName);
           showValidate($(elementName), element.msg);
         });
+      } else {
+        location.assign("/Attendee/Attendee.html");
       }
-      //location.assign('home.html');
     } catch (err) {
       console.log("from catch");
       console.log(err);
     }
   }
-  $("#loginToSignup").on("click", () => {
-    document.querySelector("#loginPage").hidden = true;
-    document.querySelector("#signupPage").hidden = false;
-    console.log("hi 2");
+  $("#signupToLogin").on("click", () => {
+    document.querySelector("#loginPage").hidden = false;
+    document.querySelector("#signupPage").hidden = true;
+    console.log("hi");
   });
 })(jQuery);
