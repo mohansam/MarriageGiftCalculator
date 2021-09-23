@@ -92,21 +92,36 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
+				<div class="alert" id="updateAlert"></div>
 				<h4 class="modal-title">Edit User</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<button type="button" class="close" id="updateModelCloseButton" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
+			<div id="updateForm">
 				<form class="form-group mb-2">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Name">
+						<input type="text" id="updateUserName" class="form-control" placeholder="Name">
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Amount">
+						<input type="text" id="updateUserAmount" class="form-control" placeholder="Amount">
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="City">
-					</div>		
-					
+						<input type="text" id="updateUserCity" class="form-control" placeholder="City">
+					</div>
+					<div>
+						<button type="button" id="updateButton" class="editButton">
+							Update
+						</button>
+					</div>
+						<div class="loader">
+							<div id="updateLoader">
+								<div></div>
+								<div></div>
+								<div></div>
+							</div>
+						</div>
 				</form>
+			</div>
+				
 				
 		</div>
 	</div>
@@ -115,16 +130,27 @@
 <div id="deleteEmployeeModal" class="modal">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div>
+			<div class="alert" id="deleteAlert">
+							
+			</div>
+			<div id="hdeleteUser">
 					<h4 class="modal-title">Delete User</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div >
-					<button type="button" class="yes" aria-hidden="true">
-						Are you sure?<strong> yes<strong>
+					<button type="button" class="close" id="deleteModelCloseButton" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div>
+					<button type="button" id="deleteButton" class="editButton">
+								Yes
 					</button>
+				</div>
+				<div class="loader">
+					<div id="deleteLoader">
+						<div></div>
+						<div></div>
+						<div></div>
 					</div>
-					
+				</div>
+												
+			</div>						
 		</div>
 	</div>
 </div>
