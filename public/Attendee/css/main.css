@@ -97,9 +97,22 @@ iframe {
 
 .limiter {
   width: 100%;
-  margin: 0 auto;
+  margin-top: 40px;
 }
-
+.navbar {
+  font-family: OpenSans-Regular;
+  font-size: 18px;
+  color: white;
+  line-height: 1.2;
+  font-weight: unset;
+}
+.navbar-search {
+  margin-left: auto;
+  margin-right: 30px;
+}
+.fixed-top {
+  margin-bottom: auto;
+}
 .container-table100 {
   width: 100%;
   min-height: 100vh;
@@ -121,7 +134,8 @@ iframe {
 }
 
 .wrap-table100 {
-  width: 1170px;
+  width: 1070px;
+  margin-bottom: auto;
 }
 
 table {
@@ -286,6 +300,10 @@ tbody tr {
     padding-left: 15px;
     padding-right: 15px;
   }
+}
+/* nav bar*/
+.navbar-style {
+  background-color: rgba(252, 255, 47, 0.062);
 }
 
 /* Modal styles */

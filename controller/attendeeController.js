@@ -21,15 +21,15 @@ get_one_attendee = async (req, res) => {
     AttendeeUser: req.params.userId,
     _id: req.body.AttendeeId,
   });
-  if (attendee != null) {
-    return attendee[0];
+  if (!attendee.length) {
+    err = JSON.stringify({
+      type: "m",
+      statusCode: 404,
+      errors: [{ msg: "attendeeId not found" }],
+    });
+    throw Error(err);
   }
-  err = JSON.stringify({
-    type: "m",
-    statusCode: 404,
-    errors: [{ msg: "attendeeId not found" }],
-  });
-  throw Error(err);
+  return attendee[0];
 };
 
 // Getting all the attendee

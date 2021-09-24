@@ -15,6 +15,7 @@
 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
@@ -30,13 +31,40 @@
 <!--===============================================================================================-->
 </head>
 <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">	
+	<a class="nav-link" href="#addEmployeeModal"  data-toggle="modal"><span class="glyphicon glyphicon-user"></span></a>
+		
+				
+		<input class="navbar-search" type="search" placeholder="Search" aria-label="Search"> 
 	
-	<div class="limiter">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
+		aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarToggler">
+		<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Total Amount</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="logout" href="#"><span class="glyphicon glyphicon-log-out"></span>Logout</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+
+	
+	<!-- table-->	
+	<div class="limiter">		
 		<div class="container-table100">
 			<div class="wrap-table100">
 				<div class="table100">
-					<table id="table">
-						<thead>
+					<table id="table" >
+						<thead class="sticky-top">
 							<tr class="table100-head">
 								<th class="column1">Name</th>
 								<th class="column2">Amount</th>
@@ -65,10 +93,7 @@
 						<label>Name</label>
 						<input type="text" class="form-control" required>
 					</div>
-					<div class="form-group">
-						<label>Email</label>
-						<input type="email" class="form-control" required>
-					</div>
+					
 					<div class="form-group">
 						<label>Address</label>
 						<textarea class="form-control" required></textarea>
@@ -99,13 +124,13 @@
 			<div id="updateForm">
 				<form class="form-group mb-2">
 					<div class="form-group">
-						<input type="text" id="updateUserName" class="form-control" placeholder="Name">
+						<input type="text" id="updateUserName" class="form-control"  placeholder="Name" required>
 					</div>
 					<div class="form-group">
-						<input type="text" id="updateUserAmount" class="form-control" placeholder="Amount">
+						<input type="text" id="updateUserAmount" class="form-control" placeholder="Amount" required >
 					</div>
 					<div class="form-group">
-						<input type="text" id="updateUserCity" class="form-control" placeholder="City">
+						<input type="text" id="updateUserCity" class="form-control" required placeholder="City" required >
 					</div>
 					<div>
 						<button type="button" id="updateButton" class="editButton">
@@ -161,6 +186,7 @@
 <!--===============================================================================================-->
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	
 <!--===============================================================================================-->
 	<script src="vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->

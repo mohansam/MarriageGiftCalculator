@@ -21,6 +21,7 @@
     });
   });
 
+  //table data render
   function renderTableRow(input, rownumber) {
     var tBody = document.querySelector("#tBody");
     var r1 = tBody.insertRow(rownumber);
@@ -49,6 +50,8 @@
     row.children[1].innerText = input.AttendeeAmount;
     row.children[2].innerText = input.AttendeeCity;
   }
+  //table data render-complted
+
   async function getAttendee() {
     try {
       const URI = window.origin + "/api/v1/attendee/getattendee";
@@ -72,20 +75,7 @@
     }
   }
 
-  function editUserPopulateTable(ele) {
-    if ($(ele).hasClass("edit")) {
-      ele = ele.children[0];
-    }
-    var row = ele.parentElement.parentElement.parentElement;
-    var id = "_" + row.attributes.id.value;
-    var updateForm = document.getElementById("updateForm").children[0];
-    updateForm.setAttribute("id", id);
-    document.getElementById("updateUserName").value = row.children[0].innerText;
-    document.getElementById("updateUserAmount").value =
-      row.children[1].innerText;
-    document.getElementById("updateUserCity").value = row.children[2].innerText;
-  }
-
+  //delete user functionalty
   function deleteUserPopulateTable(ele) {
     var row = ele.parentElement.parentElement.parentElement;
     var id = "_" + row.attributes.id.value;
@@ -117,14 +107,14 @@
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
-      console.log(data);
       if (data.error) {
+        document.getElementById("deleteAlert").innerText = "User not found";
+        document.getElementById(id).remove();
         $("#deleteLoader").removeClass("lds-ellipsis");
         $("#deleteModelCloseButton").attr("disabled", false);
       } else {
         document.getElementById("deleteAlert").innerText = "Deleted!";
         document.getElementById(id).remove();
-        console.log(data);
         $("#deleteLoader").removeClass("lds-ellipsis");
         $("#deleteModelCloseButton").attr("disabled", false);
       }
@@ -135,10 +125,13 @@
       console.log(err);
     }
   }
+  //end of delete user functionality
 
+  //update function
   $("#updateButton").on("click", () => {
     $("#updateButton").attr("disabled", true);
     $("#updateModelCloseButton").attr("disabled", true);
+    document.getElementById("updateAlert").innerText = "";
     updateAttendee();
   });
 
@@ -146,6 +139,20 @@
     $("#updateButton").attr("disabled", false);
     document.getElementById("updateAlert").innerText = "";
   });
+
+  function editUserPopulateTable(ele) {
+    if ($(ele).hasClass("edit")) {
+      ele = ele.children[0];
+    }
+    var row = ele.parentElement.parentElement.parentElement;
+    var id = "_" + row.attributes.id.value;
+    var updateForm = document.getElementById("updateForm").children[0];
+    updateForm.setAttribute("id", id);
+    document.getElementById("updateUserName").value = row.children[0].innerText;
+    document.getElementById("updateUserAmount").value =
+      row.children[1].innerText;
+    document.getElementById("updateUserCity").value = row.children[2].innerText;
+  }
 
   async function updateAttendee() {
     try {
@@ -169,9 +176,11 @@
       const data = await res.json();
       if (data.error) {
         console.log("errordata");
+        $("#updateButton").attr("disabled", true);
+        document.getElementById("updateAlert").innerText = "User not found";
+        document.getElementById(AttendeeId).remove();
         $("#updateLoader").removeClass("lds-ellipsis");
         $("#updateModelCloseButton").attr("disabled", false);
-        $("#updateButton").attr("disabled", false);
       } else {
         updateTableRow(data);
         $("#updateLoader").removeClass("lds-ellipsis");
@@ -184,6 +193,31 @@
       console.log(err);
       $("#updateLoader").removeClass("lds-ellipsis");
       $("#updateModelCloseButton").attr("disabled", false);
+    }
+  }
+  //update function end
+
+  //logut
+  $("#logout").on("click", () => {
+    logout();
+  });
+  async function logout() {
+    try {
+      const URI = window.origin + "/api/v1/user/logout";
+      const res = await fetch(URI, {
+        method: "GET",
+        body: null,
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.error) {
+        console.log("errordata");
+      } else {
+        location.assign("/User/user.html");
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 })(jQuery);
