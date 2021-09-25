@@ -2,7 +2,7 @@
   ("use strict");
 
   $(document).ready(function () {
-    renderSkleton(4);
+    renderSkleton(10);
     getAttendee();
     getTotalAmount();
     function alignModal() {
