@@ -2,6 +2,7 @@
   ("use strict");
 
   $(document).ready(function () {
+    renderSkleton(4);
     getAttendee();
     getTotalAmount();
     function alignModal() {
@@ -24,6 +25,20 @@
 
   //table data render
   function renderTableRow(input, rownumber) {
+    if (!input) {
+      var tBody = document.querySelector("#tBody");
+      var r1 = tBody.insertRow(rownumber);
+      r1.innerHTML = `<td class="column1">No user available</td>
+									<td class="column2">-</td>
+									<td class="column3">No city available</td>
+									<td class="column3">
+										<a href="javascript:void(0)" class="edit" data-toggle="modal" style="width: 40px; "><i class="material-icons"
+												data-toggle="tooltip" title="Edit">&#xE254;</i><br>
+											<a href="javascript:void(0)" class="delete" data-toggle="modal" ><i class="material-icons"
+													data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+									</td>`;
+      return;
+    }
     var tBody = document.querySelector("#tBody");
     var r1 = tBody.insertRow(rownumber);
     r1.setAttribute("id", input._id);
@@ -59,6 +74,17 @@
       tBody.children[0].remove();
     }
   }
+
+  function renderSkleton(numberOfRow) {
+    var tBody = document.querySelector("#tBody");
+    for (var i = 0; i < numberOfRow; i++) {
+      var r1 = tBody.insertRow(0);
+      r1.innerHTML = `<td class="column1"><div class="skeleton skeleton-text"></td>
+									<td class="column2"><div class="skeleton skeleton-text"></td>
+									<td class="column3"><div class="skeleton skeleton-text"></td>
+									<td class="column3"><div class="skeleton skeleton-text"></td>`;
+    }
+  }
   //table data render-complted
 
   async function getAttendee() {
@@ -74,9 +100,14 @@
       if (data.error) {
         console.log("errordata");
       } else {
-        data.forEach((element) => {
-          renderTableRow(element, 0);
-        });
+        removeTableRow();
+        if (data.length > 0) {
+          data.forEach((element) => {
+            renderTableRow(element, 0);
+          });
+          return;
+        }
+        renderTableRow();
       }
     } catch (err) {
       console.log("from catch");
@@ -312,13 +343,21 @@
     }
   }
   //search table
+  var check = false;
   $("#search").on("keyup", () => {
     var searchinput = $("#search").val();
-    if (searchinput.length == 0) {
+
+    if (searchinput.length == 0 && check) {
+      removeTableRow();
+      renderSkleton(5);
       getAttendee();
+      console.log("HI");
+      check = false;
     }
     if (searchinput.length >= 3) {
       removeTableRow();
+      renderSkleton(5);
+      check = true;
       searchAttendeeName(searchinput);
     }
   });
@@ -337,9 +376,43 @@
       if (data.error) {
         console.log("errordata");
       } else {
-        data.forEach((element) => {
-          renderTableRow(element, 0);
-        });
+        if (data.length > 0) {
+          removeTableRow();
+          data.forEach((element) => {
+            renderTableRow(element, 0);
+          });
+        } else {
+          searchAttendeeCity(value);
+        }
+      }
+    } catch (err) {
+      console.log("from catch");
+      console.log(err);
+    }
+  }
+  async function searchAttendeeCity(value) {
+    try {
+      const URI =
+        window.origin +
+        `/api/v1/attendee/searchattendeecity?AttendeeCity=${value}`;
+      const res = await fetch(URI, {
+        method: "GET",
+        body: null,
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.log("errordata");
+      } else {
+        console.log(data);
+        removeTableRow();
+        if (data.length > 0) {
+          data.forEach((element) => {
+            renderTableRow(element, 0);
+          });
+        } else {
+          renderTableRow();
+        }
       }
     } catch (err) {
       console.log("from catch");
