@@ -51,6 +51,14 @@
     row.children[1].innerText = input.AttendeeAmount;
     row.children[2].innerText = input.AttendeeCity;
   }
+
+  function removeTableRow() {
+    var tBody = document.querySelector("#tBody");
+    const tRowLength = tBody.childElementCount;
+    for (var i = 0; i < tRowLength; i++) {
+      tBody.children[0].remove();
+    }
+  }
   //table data render-complted
 
   async function getAttendee() {
@@ -301,6 +309,41 @@
       console.log(err);
       $("#addLoader").removeClass("lds-ellipsis");
       $("#addModelCloseButton").attr("disabled", false);
+    }
+  }
+  //search table
+  $("#search").on("keyup", () => {
+    var searchinput = $("#search").val();
+    if (searchinput.length == 0) {
+      getAttendee();
+    }
+    if (searchinput.length >= 3) {
+      removeTableRow();
+      searchAttendeeName(searchinput);
+    }
+  });
+
+  async function searchAttendeeName(value) {
+    try {
+      const URI =
+        window.origin +
+        `/api/v1/attendee/searchattendeename?AttendeeName=${value}`;
+      const res = await fetch(URI, {
+        method: "GET",
+        body: null,
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.log("errordata");
+      } else {
+        data.forEach((element) => {
+          renderTableRow(element, 0);
+        });
+      }
+    } catch (err) {
+      console.log("from catch");
+      console.log(err);
     }
   }
 })(jQuery);
