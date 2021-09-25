@@ -105,10 +105,17 @@ iframe {
   color: white;
   line-height: 1.2;
   font-weight: unset;
+  text-align: left;
+  align-items: space-between;
 }
+.centre {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .navbar-search {
   margin-left: auto;
-  margin-right: 30px;
+  margin-right: auto;
 }
 .fixed-top {
   margin-bottom: auto;
@@ -301,10 +308,6 @@ tbody tr {
     padding-right: 15px;
   }
 }
-/* nav bar*/
-.navbar-style {
-  background-color: rgba(252, 255, 47, 0.062);
-}
 
 /* Modal styles */
 .modal-content {
@@ -354,6 +357,8 @@ tbody tr {
 }
 .modal textarea.form-control {
   resize: vertical;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 .modal .btn {
   border-radius: 2px;

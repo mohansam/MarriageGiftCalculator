@@ -1,8 +1,9 @@
 (function ($) {
-  "use strict";
+  ("use strict");
 
   $(document).ready(function () {
     getAttendee();
+    getTotalAmount();
     function alignModal() {
       var modalDialog = $(this).find(".modal-dialog");
 
@@ -218,6 +219,88 @@
       }
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  //get total amount
+  $("#totalAmount").on("click", (e) => {
+    e.preventDefault();
+    getTotalAmount();
+  });
+  async function getTotalAmount() {
+    try {
+      const URI = window.origin + "/api/v1/attendee/totalAmount";
+      const res = await fetch(URI, {
+        method: "GET",
+        body: null,
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.log("errordata");
+      } else {
+        console.log(data);
+        document.getElementById(
+          "totalAmount"
+        ).innerText = `Total Amount ${data.totalAmount}`;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //add user function
+  $("#addButton").on("click", () => {
+    $("#addButton").attr("disabled", true);
+    $("#addModelCloseButton").attr("disabled", true);
+    document.getElementById("addAlert").innerText = "";
+    addAttendee();
+  });
+
+  $("#addModelCloseButton").on("click", () => {
+    $("#addButton").attr("disabled", false);
+    document.getElementById("addAlert").innerText = "";
+  });
+
+  async function addAttendee() {
+    try {
+      $("#addLoader").addClass("lds-ellipsis");
+      const URI = window.origin + "/api/v1/attendee/createattendee";
+      const AttendeeName = document.getElementById("addUserName").value;
+      const AttendeeAmount = document.getElementById("addUserAmount").value;
+      const AttendeeCity = document.getElementById("addUserCity").value;
+
+      const res = await fetch(URI, {
+        method: "POST",
+        body: JSON.stringify({
+          AttendeeName,
+          AttendeeAmount,
+          AttendeeCity,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.log("errordata");
+        $("#addButton").attr("disabled", false);
+        document.getElementById("addAlert").innerText = "User not found";
+        $("#addLoader").removeClass("lds-ellipsis");
+        $("#addModelCloseButton").attr("disabled", false);
+      } else {
+        renderTableRow(data, 0);
+        $("#addLoader").removeClass("lds-ellipsis");
+        $("#addModelCloseButton").attr("disabled", false);
+        $("#addButton").attr("disabled", false);
+        document.getElementById("addUserName").value = "";
+        document.getElementById("addUserAmount").value = "";
+        document.getElementById("addUserCity").value = "";
+        document.getElementById("addAlert").innerText = "Created";
+      }
+    } catch (err) {
+      console.log("from catch");
+      console.log(err);
+      $("#addLoader").removeClass("lds-ellipsis");
+      $("#addModelCloseButton").attr("disabled", false);
     }
   }
 })(jQuery);
