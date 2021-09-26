@@ -155,10 +155,12 @@
         $("#deleteModelCloseButton").attr("disabled", false);
       } else {
         document.getElementById("deleteAlert").innerText = "Deleted!";
-        getListOfAttendee();
+
         getTotalAmount();
-        $("#deleteLoader").removeClass("lds-ellipsis");
-        $("#deleteModelCloseButton").attr("disabled", false);
+        getListOfAttendee().then((res) => {
+          $("#deleteLoader").removeClass("lds-ellipsis");
+          $("#deleteModelCloseButton").attr("disabled", false);
+        });
       }
     } catch (err) {
       $("#deleteLoader").removeClass("lds-ellipsis");
