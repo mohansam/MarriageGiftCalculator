@@ -331,6 +331,7 @@
         $("#addModelCloseButton").attr("disabled", false);
       } else {
         getTotalAmount();
+        state.tablePage = 1;
         getListOfAttendee();
         $("#addLoader").removeClass("lds-ellipsis");
         $("#addModelCloseButton").attr("disabled", false);
