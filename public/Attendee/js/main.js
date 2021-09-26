@@ -2,8 +2,9 @@
   ("use strict");
 
   $(document).ready(function () {
-    renderSkleton(10);
-    getAttendee();
+    renderSkleton(8);
+    getListOfAttendee();
+
     getTotalAmount();
     function alignModal() {
       var modalDialog = $(this).find(".modal-dialog");
@@ -154,7 +155,8 @@
         $("#deleteModelCloseButton").attr("disabled", false);
       } else {
         document.getElementById("deleteAlert").innerText = "Deleted!";
-        document.getElementById(id).remove();
+        getListOfAttendee();
+        getTotalAmount();
         $("#deleteLoader").removeClass("lds-ellipsis");
         $("#deleteModelCloseButton").attr("disabled", false);
       }
@@ -223,6 +225,8 @@
         $("#updateModelCloseButton").attr("disabled", false);
       } else {
         updateTableRow(data);
+        getTotalAmount();
+        getListOfAttendee();
         $("#updateLoader").removeClass("lds-ellipsis");
         $("#updateModelCloseButton").attr("disabled", false);
         $("#updateButton").attr("disabled", false);
@@ -326,7 +330,8 @@
         $("#addLoader").removeClass("lds-ellipsis");
         $("#addModelCloseButton").attr("disabled", false);
       } else {
-        renderTableRow(data, 0);
+        getTotalAmount();
+        getListOfAttendee();
         $("#addLoader").removeClass("lds-ellipsis");
         $("#addModelCloseButton").attr("disabled", false);
         $("#addButton").attr("disabled", false);
@@ -346,12 +351,11 @@
   var check = false;
   $("#search").on("keyup", () => {
     var searchinput = $("#search").val();
-
     if (searchinput.length == 0 && check) {
       removeTableRow();
-      renderSkleton(5);
-      getAttendee();
-      console.log("HI");
+      renderSkleton(8);
+      state.fromSearch = false;
+      getListOfAttendee();
       check = false;
     }
     if (searchinput.length >= 3) {
@@ -364,6 +368,10 @@
 
   async function searchAttendeeName(value) {
     try {
+      var pageButton = document.getElementById("pagination-wrapper");
+      while (pageButton.firstChild) {
+        pageButton.removeChild(pageButton.firstChild);
+      }
       const URI =
         window.origin +
         `/api/v1/attendee/searchattendeename?AttendeeName=${value}`;
@@ -378,9 +386,10 @@
       } else {
         if (data.length > 0) {
           removeTableRow();
-          data.forEach((element) => {
-            renderTableRow(element, 0);
-          });
+          state.searchPage = 1;
+          state.fromSearch = true;
+          state.querySet = data;
+          buildTable();
         } else {
           searchAttendeeCity(value);
         }
@@ -404,12 +413,12 @@
       if (data.error) {
         console.log("errordata");
       } else {
-        console.log(data);
         removeTableRow();
         if (data.length > 0) {
-          data.forEach((element) => {
-            renderTableRow(element, 0);
-          });
+          state.searchPage = 1;
+          state.fromSearch = true;
+          state.querySet = data;
+          buildTable();
         } else {
           renderTableRow();
         }
@@ -419,4 +428,128 @@
       console.log(err);
     }
   }
+  //pagination
+  var state = {
+    querySet: "",
+    tablePage: 1,
+    page: 1,
+    rows: 8,
+    window: 5,
+    searchPage: 1,
+    fromSearch: false,
+  };
+  async function getListOfAttendee() {
+    try {
+      const URI = window.origin + "/api/v1/attendee/getattendee";
+      const res = await fetch(URI, {
+        method: "GET",
+        body: null,
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        console.log("errordata");
+      } else {
+        if (data.length > 0) {
+          state.querySet = data.reverse();
+          buildTable();
+          return;
+        }
+        renderTableRow();
+      }
+    } catch (err) {
+      console.log("from catch");
+      console.log(err);
+    }
+  }
+
+  function pagination(querySet, page, rows) {
+    var trimStart = (page - 1) * rows;
+    var trimEnd = trimStart + rows;
+    console.log(querySet);
+    var trimmedData = querySet.slice(trimStart, trimEnd);
+
+    var pages;
+    if (querySet.length % rows) {
+      pages = Math.floor(querySet.length / rows) + 1;
+      return {
+        querySet: trimmedData,
+        pages: pages,
+      };
+    }
+    pages = querySet.length / rows;
+    return {
+      querySet: trimmedData,
+      pages: pages,
+    };
+  }
+
+  function pageButtons(pages, page) {
+    var wrapper = document.getElementById("pagination-wrapper");
+
+    wrapper.innerHTML = ``;
+
+    var maxLeft = state.page - Math.floor(state.window / 2);
+    var maxRight = state.page + Math.floor(state.window / 2);
+
+    if (maxLeft < 1) {
+      maxLeft = 1;
+      maxRight = state.window;
+    }
+
+    if (maxRight > pages) {
+      maxLeft = pages - (state.window - 1);
+
+      if (maxLeft < 1) {
+        maxLeft = 1;
+      }
+      maxRight = pages;
+    }
+
+    for (var page = maxLeft; page <= maxRight; page++) {
+      wrapper.innerHTML += `<button value=${page} class="page btn btn-sm btn-info">${page}</button>`;
+    }
+
+    if (state.page != 1) {
+      wrapper.innerHTML =
+        `<button value=${1} class="page btn btn-sm btn-info">&#171; First</button>` +
+        wrapper.innerHTML;
+    }
+
+    if (state.page != pages) {
+      wrapper.innerHTML += `<button value=${pages} class="page btn btn-sm btn-info">Last &#187;</button>`;
+    }
+
+    $(".page").on("click", function () {
+      removeTableRow();
+      if (state.fromSearch) {
+        state.searchPage = Number($(this).val());
+        $(".btn").attr("disabled", true);
+      } else {
+        state.tablePage = Number($(this).val());
+        $(".btn").attr("disabled", true);
+      }
+
+      buildTable();
+    });
+  }
+  function buildTable() {
+    if (state.fromSearch) {
+      state.page = state.searchPage;
+      var data = pagination(state.querySet, state.searchPage, state.rows);
+    } else {
+      state.page = state.tablePage;
+      var data = pagination(state.querySet, state.tablePage, state.rows);
+    }
+
+    var myList = data.querySet;
+    removeTableRow();
+    myList.forEach((element) => {
+      renderTableRow(element, -1);
+    });
+    pageButtons(data.pages);
+  }
+
+  //end of pagination
 })(jQuery);

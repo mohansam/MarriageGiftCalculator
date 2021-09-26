@@ -549,3 +549,27 @@ table .avatar {
     background-color: hsl(200, 20%, 95%);
   }
 }
+
+/*--Pagination--*/
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  width: 400px;
+}
+
+.controls-item {
+  display: inline-block;
+}
+
+.btn {
+  background-color: black;
+  margin: 1px;
+}
+.btn:active {
+  background-color: rgba(200, 255, 0, 0.664);
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
