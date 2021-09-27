@@ -457,9 +457,13 @@
         headers: { "Content-Type": "application/json" },
       });
       const data = await res.json();
+      const statusCode = await res.status;
 
       if (data.error) {
-        console.log("errordata");
+        if (statusCode == 401) {
+          unauthorizedError();
+        }
+        console.log(statusCode);
       } else {
         if (data.length > 0) {
           state.querySet = data.reverse();
@@ -478,7 +482,6 @@
   function pagination(querySet, page, rows) {
     var trimStart = (page - 1) * rows;
     var trimEnd = trimStart + rows;
-    console.log(querySet);
     var trimmedData = querySet.slice(trimStart, trimEnd);
 
     var pages;
@@ -563,4 +566,11 @@
   }
 
   //end of pagination
+
+  //to handle 401 error
+  function unauthorizedError() {
+    document.cookie =
+      "loggedinstatus=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    location.assign("/User/user.html");
+  }
 })(jQuery);
