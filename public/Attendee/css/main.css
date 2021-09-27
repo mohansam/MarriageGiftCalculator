@@ -112,7 +112,9 @@ iframe {
   text-align: center;
   vertical-align: middle;
 }
-
+.navbar-desktop {
+  margin-left: auto;
+}
 .navbar-search {
   margin-left: auto;
   margin-right: auto;

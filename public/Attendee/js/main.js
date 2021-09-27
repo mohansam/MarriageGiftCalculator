@@ -2,7 +2,7 @@
   ("use strict");
 
   $(document).ready(function () {
-    renderSkleton(8);
+    renderSkleton(state.rows);
     getListOfAttendee();
 
     getTotalAmount();
@@ -88,34 +88,6 @@
   }
   //table data render-complted
 
-  async function getAttendee() {
-    try {
-      const URI = window.origin + "/api/v1/attendee/getattendee";
-      const res = await fetch(URI, {
-        method: "GET",
-        body: null,
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      console.log(data);
-      if (data.error) {
-        console.log("errordata");
-      } else {
-        removeTableRow();
-        if (data.length > 0) {
-          data.forEach((element) => {
-            renderTableRow(element, 0);
-          });
-          return;
-        }
-        renderTableRow();
-      }
-    } catch (err) {
-      console.log("from catch");
-      console.log(err);
-    }
-  }
-
   //delete user functionalty
   function deleteUserPopulateTable(ele) {
     var row = ele.parentElement.parentElement.parentElement;
@@ -155,12 +127,13 @@
         $("#deleteModelCloseButton").attr("disabled", false);
       } else {
         document.getElementById("deleteAlert").innerText = "Deleted!";
-
         getTotalAmount();
-        getListOfAttendee().then((res) => {
-          $("#deleteLoader").removeClass("lds-ellipsis");
-          $("#deleteModelCloseButton").attr("disabled", false);
+        state.querySet = state.querySet.filter((item) => {
+          if (item._id != id) return true;
         });
+        buildTable();
+        $("#deleteLoader").removeClass("lds-ellipsis");
+        $("#deleteModelCloseButton").attr("disabled", false);
       }
     } catch (err) {
       $("#deleteLoader").removeClass("lds-ellipsis");
@@ -226,9 +199,10 @@
         $("#updateLoader").removeClass("lds-ellipsis");
         $("#updateModelCloseButton").attr("disabled", false);
       } else {
-        updateTableRow(data);
         getTotalAmount();
-        getListOfAttendee();
+        var pos = state.querySet.findIndex((item) => item._id === data._id);
+        state.querySet[pos] = data;
+        buildTable();
         $("#updateLoader").removeClass("lds-ellipsis");
         $("#updateModelCloseButton").attr("disabled", false);
         $("#updateButton").attr("disabled", false);
@@ -334,7 +308,9 @@
       } else {
         getTotalAmount();
         state.tablePage = 1;
-        getListOfAttendee();
+        console.log(data);
+        state.querySet.unshift(data);
+        buildTable();
         $("#addLoader").removeClass("lds-ellipsis");
         $("#addModelCloseButton").attr("disabled", false);
         $("#addButton").attr("disabled", false);
@@ -356,14 +332,14 @@
     var searchinput = $("#search").val();
     if (searchinput.length == 0 && check) {
       removeTableRow();
-      renderSkleton(8);
+      renderSkleton(state.rows);
       state.fromSearch = false;
       getListOfAttendee();
       check = false;
     }
     if (searchinput.length >= 3) {
       removeTableRow();
-      renderSkleton(5);
+      renderSkleton(state.rows);
       check = true;
       searchAttendeeName(searchinput);
     }
@@ -436,11 +412,42 @@
     querySet: "",
     tablePage: 1,
     page: 1,
-    rows: 8,
+    rows: 9,
     window: 5,
     searchPage: 1,
     fromSearch: false,
   };
+  function getWindowSize() {
+    if (window.innerWidth < 768) {
+      state.rows = 4;
+      return;
+    } else if (window.innerWidth < 991) {
+      state.rows = 8;
+
+      return;
+    } else {
+      state.rows = 9;
+
+      return;
+    }
+  }
+  getWindowSize();
+  window.onresize = function () {
+    if (window.innerWidth < 768) {
+      state.rows = 4;
+      buildTable();
+      return;
+    } else if (window.innerWidth < 991) {
+      buildTable();
+      state.rows = 8;
+      return;
+    } else {
+      buildTable();
+      state.rows = 9;
+      return;
+    }
+  };
+
   async function getListOfAttendee() {
     try {
       const URI = window.origin + "/api/v1/attendee/getattendee";
@@ -459,6 +466,7 @@
           buildTable();
           return;
         }
+        removeTableRow();
         renderTableRow();
       }
     } catch (err) {
