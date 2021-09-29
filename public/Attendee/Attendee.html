@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 	<script>
-		var cookieValue = document.cookie.split(" ")[0];
+		var cookieValue = document.cookie;
 		definedCookie = 'loggedinstatus=true';
-		if (definedCookie.localeCompare(cookieValue) != 0) {
+		if (!cookieValue.includes(definedCookie)) {
 			location.assign("/User/user.html");
 		}
 	</script>
