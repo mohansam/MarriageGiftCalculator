@@ -127,6 +127,8 @@
         $("#deleteModelCloseButton").attr("disabled", false);
       } else {
         document.getElementById("deleteAlert").innerText = "Deleted!";
+        var deleteElment = document.getElementById("hdeleteUser").children[0];
+        deleteElment.innerText = "";
         getTotalAmount();
         state.querySet = state.querySet.filter((item) => {
           if (item._id != id) return true;
@@ -134,6 +136,11 @@
         buildTable();
         $("#deleteLoader").removeClass("lds-ellipsis");
         $("#deleteModelCloseButton").attr("disabled", false);
+        setTimeout(function () {
+          $("#deleteEmployeeModal").modal("hide");
+          $("#deleteButton").attr("disabled", false);
+          document.getElementById("deleteAlert").innerText = "";
+        }, 400);
       }
     } catch (err) {
       $("#deleteLoader").removeClass("lds-ellipsis");
