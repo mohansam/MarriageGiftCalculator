@@ -575,3 +575,12 @@ table .avatar {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* auto complete*/
+
+.autocomplete-items {
+  /*when navigating through the items using the arrow keys:*/
+  position: absolute;
+  font-size: 18px;
+  color: black;
+}
