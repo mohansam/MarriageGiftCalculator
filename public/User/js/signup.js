@@ -100,9 +100,4 @@
       console.log(err);
     }
   }
-  $("#signupToLogin").on("click", () => {
-    document.querySelector("#loginPage").hidden = false;
-    document.querySelector("#signupPage").hidden = true;
-    console.log("hi");
-  });
 })(jQuery);

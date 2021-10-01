@@ -99,9 +99,4 @@
       console.log(err);
     }
   }
-  $("#loginToSignup").on("click", () => {
-    document.querySelector("#loginPage").hidden = true;
-    document.querySelector("#signupPage").hidden = false;
-    console.log("hi 2");
-  });
 })(jQuery);

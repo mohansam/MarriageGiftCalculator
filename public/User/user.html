@@ -17,6 +17,8 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
+<!-- Font Awesome icons (free version)-->
+
 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
@@ -27,11 +29,144 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link href="css/home.css" rel="stylesheet" />
 <!--===============================================================================================-->
 </head>
-<body>
-	
+<body  id="page-top">
+	<!-- Navigation-->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+		<div class="container">
+			<a class="navbar-brand" href="#page-top">Moi tracker</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+				aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				Menu
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+					<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+					<li class="nav-item"><a class="nav-link" href="#signupPage">Signup</a></li>					
+					<li class="nav-item"><a class="nav-link" href="#loginPage">Login</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- Masthead-->
+	<header class="masthead">
+		<div class="container">
+			<div class="masthead-subheading">Welcome To Marriage Gift Money Tracker!</div>
+			<div class="masthead-heading text-uppercase">GLAD YOU FOUND US</div>
+			<a class="btn btn-primary btn-xl text-uppercase" href="#signupPage">Create Account to Explore</a>
+		</div>
+	</header>
+<!-- About-->
+<section class="page-section" id="about">
+	<div class="container">
+		<div class="text-center">
+			<h2 class="section-heading text-uppercase">About</h2>
+			<h3 class="section-subheading text-muted">Easy Solution on Marriage Gift Money Tracker(Moi Amount)</h3>
+		</div>
+		<ul class="timeline">
+			<li>
+				<div class="timeline-image"><img class="rounded-circle img-fluid" src="images/about/1.jpg"
+						alt="..." /></div>
+				<div class="timeline-panel">
+					<div class="timeline-heading">						
+						<h4 class="subheading">How to Use</h4>
+					</div>
+					<div class="timeline-body">
+						<p class="text-muted">Create an Account and start adding giver details sunch as Name, Amount, City. We will take care all the tracking and calculation part</p>
+					</div>
+				</div>
+			</li>
+			<li class="timeline-inverted">
+				<div class="timeline-image"><img class="rounded-circle img-fluid" src="images/about/2.jpg"
+						alt="..." /></div>
+				<div class="timeline-panel">
+					<div class="timeline-heading">
+					<h4 class="subheading">Advantage</h4>
+					</div>
+					<div class="timeline-body">
+						<p class="text-muted">No more manual calculation. Same account can be used to login more than one device thus at a time multiple users 
+							can add the details. Can be opened in Mobile device.
+						</p>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="timeline-image"><img class="rounded-circle img-fluid" src="images/about/3.jpg"
+						alt="..." /></div>
+				<div class="timeline-panel">
+					<div class="timeline-heading">					
+						<h4 class="subheading">Privacy</h4>
+					</div>
+					<div class="timeline-body">
+						<p class="text-muted">You are the owner of the data, once you done tracking all the giver details,
+							you can download the details and delete your account. How about that!
+						</p>
+					</div>
+				</div>
+			</li>				
+		</ul>
+	</div>
+</section>
+
+<!----end of Abount---->
+
+<!----login page-->
 	<div class="limiter">
+		<!--SignUp-->
+		<div class="container-login100" id="signupPage">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="images/img-01.png" alt="IMG">
+				</div id="signupMainDiv">
+				<form class="login100-form validate-form" id="signupForm">
+					<span class="login100-form-title">
+						Create Account
+					</span>
+					<div id="signupValidator">
+						<div class="wrap-input100 validate-input" data-validate="Name is required">
+							<input class="input100" id="signupUserName" type="text" name="name" placeholder="Name">
+							<span class="focus-input100"></span>
+							<span class="symbol-input100">
+								<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+							</span>
+						</div>
+						<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+							<input class="input100" id="signupUserEmail" type="text" name="email" placeholder="Email">
+							<span class="focus-input100"></span>
+							<span class="symbol-input100">
+								<i class="fa fa-envelope" aria-hidden="true"></i>
+							</span>
+						</div>
+		
+						<div class="wrap-input100 validate-input" data-validate="Password is required">
+							<input class="input100" id="signupUserPwd" type="password" name="pass" placeholder="Password">
+							<span class="focus-input100"></span>
+							<span class="symbol-input100">
+								<i class="fa fa-lock" aria-hidden="true"></i>
+							</span>
+						</div>
+					</div>
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn login_hover" id="signupButton">
+							Signup
+						</button>
+					</div>
+					<div class="loader">
+						<div id="signupLoader">
+							<div></div>
+							<div></div>
+							<div></div>
+						</div>
+					</div>					
+				</form>
+			</div>
+		</div>
+		</div>
+		<!-- Signup end page-->
+		<!---login page-->
 		<div class="container-login100" id="loginPage">
 			<div class="wrap-login100">
 				<div class="login100-pic js-tilt" data-tilt>
@@ -79,81 +214,19 @@
 						<a class="txt2" href="#">
 							Username / Password?
 						</a>
-					</div>
-
-					<div class="text-center p-t-136">
-						<a class="txt2" href="#signupPage" id="loginToSignup">
-							Create your Account
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
-					</div>
+					</div>					
 				</form>
 				</div>				
 			</div>
     	</div>
-		<!--SignUp-->
-			<div class="container-login100" id="signupPage" hidden>
-				<div class="wrap-login100">
-					<div class="login100-pic js-tilt" data-tilt>
-						<img src="images/img-01.png" alt="IMG">
-					</div id="signupMainDiv">
-					<form class="login100-form validate-form" id="signupForm">
-						<span class="login100-form-title">
-							Create Account
-						</span>
-						<div id="signupValidator">
-							<div class="wrap-input100 validate-input" data-validate="Name is required">
-								<input class="input100" id="signupUserName" type="text" name="name" placeholder="Name">
-								<span class="focus-input100"></span>
-								<span class="symbol-input100">
-									<i class="fa fa-user-circle-o" aria-hidden="true"></i>
-								</span>
-							</div>
-							<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-								<input class="input100" id="signupUserEmail" type="text" name="email" placeholder="Email">
-								<span class="focus-input100"></span>
-								<span class="symbol-input100">
-									<i class="fa fa-envelope" aria-hidden="true"></i>
-								</span>
-							</div>
-			
-							<div class="wrap-input100 validate-input" data-validate="Password is required">
-								<input class="input100" id="signupUserPwd" type="password" name="pass" placeholder="Password">
-								<span class="focus-input100"></span>
-								<span class="symbol-input100">
-									<i class="fa fa-lock" aria-hidden="true"></i>
-								</span>
-							</div>
-						</div>
-						<div class="container-login100-form-btn">
-							<button class="login100-form-btn login_hover" id="signupButton">
-								Signup
-							</button>
-						</div>
-							<div class="loader">
-								<div id="signupLoader">
-									<div></div>
-									<div></div>
-									<div></div>
-								</div>
-							</div>
-						<div class="text-center p-t-136">
-							<a class="txt2" href="#loginPage" id="signupToLogin">
-								Already have an Account?Click here
-								<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-							</a>
-						</div>
-					</form>
-				</div>
-			</div>
-			</div>
-		<!-- Signup end page-->
+		<!---login end page-->
 	</div>
-
+<!----end of login page-->
 	
 
 
-	
+	<!-- Bootstrap core JS-->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 <!--===============================================================================================-->	
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
@@ -169,6 +242,7 @@
 		})
 	</script>
 <!--===============================================================================================-->
+<script src="js/home.js"></script>
 	<script src="js/login.js"></script>
 <script src="js/signup.js"></script>
 </body>
