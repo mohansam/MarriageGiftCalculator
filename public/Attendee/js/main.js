@@ -695,4 +695,58 @@
       "loggedinstatus=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     location.assign("/User/user.html");
   }
+
+  //download PDF
+  $("#downloadPDF").on("click", (e) => {
+    e.preventDefault();
+    getAllttendee();
+  });
+  async function getAllttendee() {
+    try {
+      const URI = window.origin + "/api/v1/attendee/getattendee";
+      const res = await fetch(URI, {
+        method: "GET",
+        body: null,
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      const statusCode = await res.status;
+
+      if (data.error) {
+        if (statusCode == 401) {
+          unauthorizedError();
+        }
+        console.log(statusCode);
+      } else {
+        if (data.length > 0) {
+          downloadPDF(data);
+          return;
+        }
+      }
+    } catch (err) {
+      console.log("from catch");
+      console.log(err);
+    }
+  }
+  function downloadPDF(data) {
+    window.jsPDF = window.jspdf.jsPDF;
+    const doc = new jsPDF("p", "mm");
+    var i = 1;
+    body = data.map((item) => [
+      i++,
+      item.AttendeeName,
+      item.AttendeeAmount,
+      item.AttendeeCity,
+    ]);
+    doc.autoTable({
+      head: [["ID", "Name", "Amount", "Country"]],
+      body: body,
+      theme: "grid",
+      tableWidth: 180,
+      styles: {},
+      columnStyles: {},
+    });
+
+    doc.save("giverDetails");
+  }
 })(jQuery);
