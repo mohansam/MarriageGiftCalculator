@@ -23,7 +23,9 @@ db.once("open", () => console.log("Connected to Database"));
 app.get("/", (req, res) => {
   res
     .status(200)
-    .json({ message: "this app is used to calculate marriage gift amount" });
+    .json({
+      message: "this app is used to calculate marriage gift money tracker",
+    });
 });
 
 //help route
