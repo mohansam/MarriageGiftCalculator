@@ -21,15 +21,15 @@ db.once("open", () => console.log("Connected to Database"));
 
 //root route
 app.get("/", (req, res) => {
-  res
-    .status(200)
-    .json({
-      message: "this app is used to calculate marriage gift money tracker",
-    });
+  console.log(req.hostname);
+  res.status(200).json({
+    message: "this app is used to calculate marriage gift money tracker",
+  });
 });
 
 //help route
 app.get("/help", (req, res) => {
+  console.log(req);
   res.status(200).json(helpData);
 });
 

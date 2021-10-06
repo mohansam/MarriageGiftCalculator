@@ -49,12 +49,17 @@
 				<li class="nav-item active">
 					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
 				</li>
-				<li class="nav-item active">
+				<li class="nav-item">
 					<a class="nav-link" id="totalAmount" href="#">Total Amount</a>
 				</li>
-				<li class="nav-item active">
-					<a class="nav-link" id="downloadPDF" href="#">Download</a>
-				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="downloadPDF" href="#">
+							<i class="material-icons centre"><span class="material-icons-outlined">
+								save_alt
+							</span></i>
+						Download
+						</span></a>
+				</li>				
 				<li class="nav-item">
 					<a class="nav-link" id="logout" href="#">
 						<i class="material-icons centre"><span class="material-icons-outlined">
@@ -69,12 +74,11 @@
 	</div>
 </nav>
 
-<!--/.Navbar-->
-
-
-	
+<!--/.Navbar-->	
 	<!-- table-->	
+	
 	<div class="limiter">
+		<header class="masthead">
 		<div class="container-table100">
 			<div class="wrap-table100">
 				<div class="table100">
@@ -99,10 +103,11 @@
 					</div>						
 			<!--End of pagination-->
 		</div>
+		</header>
 	</div>
 
 	<!---  Modal check-->
-<div id="addEmployeeModal" class="modal fade">
+<div id="addEmployeeModal" class="modal fade">	
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -144,6 +149,7 @@
 	</div>
 </div>
 <!-- Edit Modal HTML -->
+
 <div id="editEmployeeModal" class="modal fade ">
 	
 	<div class="modal-dialog">
@@ -178,11 +184,10 @@
 						</div>
 				</form>
 			</div>
-				
-				
-		</div>
+						</div>
 	</div>
 </div>
+
 <!-- Delete Modal HTML -->
 <div id="deleteEmployeeModal" class="modal">
 	<div class="modal-dialog">

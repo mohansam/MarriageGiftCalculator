@@ -19,6 +19,15 @@ html {
   height: 100%;
   font-family: sans-serif;
 }
+/*--header*/
+header.masthead {
+  text-align: center;
+  color: #fff;
+  background-image: url("../images/backgroundImage.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
 
 /* ------------------------------------ */
 a {
@@ -125,12 +134,13 @@ iframe {
 .container-table100 {
   width: 100%;
   min-height: 100vh;
+  /*
   background: #c850c0;
   background: -webkit-linear-gradient(45deg, #4158d0, #c850c0);
   background: -o-linear-gradient(45deg, #4158d0, #c850c0);
   background: -moz-linear-gradient(45deg, #4158d0, #c850c0);
   background: linear-gradient(45deg, #4158d0, #c850c0);
-
+*/
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -150,7 +160,7 @@ iframe {
 table {
   border-spacing: 1;
   border-collapse: collapse;
-  background: rgba(252, 255, 47, 0.493);
+  background-color: rgba(86, 90, 76, 0.582);
   border-radius: 10px;
   overflow: hidden;
   width: 100%;
@@ -201,13 +211,13 @@ table th.r {
 }
 
 tbody tr:nth-child(even) {
-  background-color: rgba(252, 255, 47, 0.062);
+  background-color: rgba(86, 90, 76, 0.582);
 }
 
 tbody tr {
   font-family: OpenSans-Regular;
   font-size: 15px;
-  color: black;
+  color: whitesmoke;
   line-height: 1.2;
   font-weight: unset;
 }
@@ -318,22 +328,7 @@ tbody tr {
   padding: 50px !important;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
-  background: #c859ff;
-  background: -moz-linear-gradient(45deg, #c859ff 0%, #ffab8c 100%);
-  background: -webkit-gradient(
-    left bottom,
-    right top,
-    color-stop(0%, #c859ff),
-    color-stop(100%, #ffab8c)
-  );
-  background: -webkit-linear-gradient(45deg, #c859ff 0%, #ffab8c 100%);
-  background: -o-linear-gradient(45deg, #c859ff 0%, #ffab8c 100%);
-  background: -ms-linear-gradient(45deg, #c859ff 0%, #ffab8c 100%);
-  background: linear-gradient(45deg, #c859ff 0%, #ffab8c 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c859ff', endColorstr='#ffab8c', GradientType=1 );
-  -webkit-box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
-  -moz-box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
-  box-shadow: 0px 10px 34px -15px rgba(0, 0, 0, 0.24);
+  background: #84608b;
 }
 
 .modal .modal-body,

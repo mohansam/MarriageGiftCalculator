@@ -225,6 +225,7 @@
   //logut
   $("#logout").on("click", () => {
     logout();
+    $("#logout").addClass("active");
   });
   async function logout() {
     try {
@@ -254,6 +255,8 @@
   async function getTotalAmount() {
     try {
       const URI = window.origin + "/api/v1/attendee/totalAmount";
+      $("#totalAmount").addClass("active");
+
       const res = await fetch(URI, {
         method: "GET",
         body: null,
@@ -267,6 +270,7 @@
         document.getElementById(
           "totalAmount"
         ).innerText = `Total Amount ${data.totalAmount}`;
+        $("#totalAmount").removeClass("active");
       }
     } catch (err) {
       console.log(err);
@@ -703,6 +707,7 @@
   });
   async function getAllttendee() {
     try {
+      $("#downloadPDF").addClass("active");
       const URI = window.origin + "/api/v1/attendee/getattendee";
       const res = await fetch(URI, {
         method: "GET",
@@ -720,6 +725,7 @@
       } else {
         if (data.length > 0) {
           downloadPDF(data);
+          $("#downloadPDF").removeClass("active");
           return;
         }
       }
