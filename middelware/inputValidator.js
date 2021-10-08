@@ -77,9 +77,9 @@ module.exports.attendee_creation_validation = async (req) => {
       .bail()
       .isString()
       .withMessage("Name must be a string")
-      .isLength({ min: 3, max: 20 })
+      .isLength({ min: 3, max: 30 })
       .withMessage(
-        "User Name length should be between minimum 3 characters to maximum 20 characters"
+        "User Name length should be between minimum 3 characters to maximum 30 characters"
       )
       .run(req),
     await body("AttendeeAmount")
@@ -97,9 +97,9 @@ module.exports.attendee_creation_validation = async (req) => {
       .bail()
       .isString()
       .withMessage("Must be a string")
-      .isLength({ min: 3, max: 20 })
+      .isLength({ min: 3, max: 50 })
       .withMessage(
-        "City length should be between minimum 3 characters to maximum 20 characters"
+        "City length should be between minimum 3 characters to maximum 50 characters"
       )
       .run(req),
   ];
