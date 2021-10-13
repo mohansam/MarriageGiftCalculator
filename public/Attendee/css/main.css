@@ -551,6 +551,7 @@ table .avatar {
 .container {
   margin-left: auto;
   margin-right: auto;
+  margin-top: auto;
   padding: 10px;
   width: 400px;
 }
@@ -563,9 +564,10 @@ table .avatar {
   background-color: black;
   margin: 1px;
 }
-.btn:active {
+.btn:hover {
   background-color: rgba(200, 255, 0, 0.664);
 }
+
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;

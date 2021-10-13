@@ -627,17 +627,13 @@
 
   function pageButtons(pages, page) {
     var wrapper = document.getElementById("pagination-wrapper");
-
     wrapper.innerHTML = ``;
-
     var maxLeft = state.page - Math.floor(state.window / 2);
     var maxRight = state.page + Math.floor(state.window / 2);
-
     if (maxLeft < 1) {
       maxLeft = 1;
       maxRight = state.window;
     }
-
     if (maxRight > pages) {
       maxLeft = pages - (state.window - 1);
 
@@ -646,31 +642,23 @@
       }
       maxRight = pages;
     }
-
-    for (var page = maxLeft; page <= maxRight; page++) {
-      wrapper.innerHTML += `<button value=${page} class="page btn btn-sm btn-info">${page}</button>`;
+    for (var page = maxLeft + 1; page < maxRight; page++) {
+      wrapper.innerHTML += `<button value=${page} id=${page} class="page btn btn-sm btn-info">${page}</button>`;
     }
-
-    if (state.page != 1) {
+    if (pages > 1) {
       wrapper.innerHTML =
-        `<button value=${1} class="page btn btn-sm btn-info">&#171; First</button>` +
+        `<button value=${1} id=${1} class="page btn btn-sm btn-info">&#171; First</button>` +
         wrapper.innerHTML;
-    }
-
-    if (state.page != pages) {
-      wrapper.innerHTML += `<button value=${pages} class="page btn btn-sm btn-info">Last &#187;</button>`;
+      wrapper.innerHTML += `<button value=${pages} id=${pages} class="page btn btn-sm btn-info">Last &#187;</button>`;
     }
 
     $(".page").on("click", function () {
       removeTableRow();
       if (state.fromSearch) {
         state.searchPage = Number($(this).val());
-        $(".btn").attr("disabled", true);
       } else {
         state.tablePage = Number($(this).val());
-        $(".btn").attr("disabled", true);
       }
-
       buildTable();
     });
   }
@@ -689,6 +677,7 @@
       renderTableRow(element, -1);
     });
     pageButtons(data.pages);
+    $(`#${state.page}`).addClass("active");
   }
 
   //end of pagination
