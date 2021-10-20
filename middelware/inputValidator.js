@@ -17,6 +17,8 @@ module.exports.signup_validation = async (req) => {
       .withMessage(
         "password length should be between minimum 6 characters to maximum 20 characters"
       )
+      .trim()
+      .escape()
       .run(req),
     await body("UserName")
       .exists()
@@ -29,6 +31,8 @@ module.exports.signup_validation = async (req) => {
       .withMessage(
         "User Name length should be between minimum 3 characters to maximum 20 characters"
       )
+      .trim()
+      .escape()
       .run(req),
   ];
 };
@@ -42,6 +46,8 @@ module.exports.login_validation = async (req) => {
       .bail()
       .isEmail()
       .withMessage("Not a valid email")
+      .trim()
+      .escape()
       .run(req),
     await body("UserPwd")
       .exists()
@@ -51,6 +57,8 @@ module.exports.login_validation = async (req) => {
       .withMessage(
         "password length should be between minimum 6 characters to maximum 20 characters"
       )
+      .trim()
+      .escape()
       .run(req),
   ];
 };
@@ -81,6 +89,8 @@ module.exports.attendee_creation_validation = async (req) => {
       .withMessage(
         "User Name length should be between minimum 3 characters to maximum 30 characters"
       )
+      .trim()
+      .escape()
       .run(req),
     await body("AttendeeAmount")
       .exists()
@@ -90,6 +100,8 @@ module.exports.attendee_creation_validation = async (req) => {
       .withMessage("Attendee amount should be greater than 0")
       .bail()
       .toInt()
+      .trim()
+      .escape()
       .run(req),
     await body("AttendeeCity")
       .exists()
@@ -97,10 +109,12 @@ module.exports.attendee_creation_validation = async (req) => {
       .bail()
       .isString()
       .withMessage("Must be a string")
-      .isLength({ min: 3, max: 50 })
+      .isLength({ min: 3, max: 100 })
       .withMessage(
-        "City length should be between minimum 3 characters to maximum 50 characters"
+        "City length should be between minimum 3 characters to maximum 100 characters"
       )
+      .trim()
+      .escape()
       .run(req),
   ];
 };
