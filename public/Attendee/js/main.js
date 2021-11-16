@@ -123,7 +123,6 @@
         document.getElementById("deleteAlert").innerText = "Deleted!";
         var deleteElment = document.getElementById("hdeleteUser").children[0];
         deleteElment.innerText = "";
-        getTotalAmount();
         state.querySet = state.querySet.filter((item) => {
           if (item._id != id) return true;
         });
@@ -200,7 +199,6 @@
         $("#updateLoader").removeClass("lds-ellipsis");
         $("#updateModelCloseButton").attr("disabled", false);
       } else {
-        getTotalAmount();
         var pos = state.querySet.findIndex((item) => item._id === data._id);
         state.querySet[pos] = data;
         buildTable();
@@ -248,30 +246,30 @@
   }
 
   //get total amount
-  $("#totalAmount").on("click", (e) => {
-    e.preventDefault();
-    getTotalAmount();
-  });
+  //$("#totalAmount").on("click", (e) => {
+  //e.preventDefault();
+  //getTotalAmount();
+  //});
   async function getTotalAmount() {
     try {
       const URI = window.origin + "/api/v1/attendee/totalAmount";
-      $("#totalAmount").addClass("active");
+      //$("#totalAmount").addClass("active");
 
-      const res = await fetch(URI, {
-        method: "GET",
-        body: null,
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      if (data.error) {
-        console.log("errordata");
-      } else {
-        console.log(data);
+      //const res = await fetch(URI, {
+      //method: "GET",
+      //body: null,
+      //headers: { "Content-Type": "application/json" },
+      //});
+
+      let sse = new EventSource(URI);
+      sse.onmessage = (message) => {
+        console.log(message.data);
         document.getElementById(
           "totalAmount"
-        ).innerText = `Total Amount ${data.totalAmount}`;
-        $("#totalAmount").removeClass("active");
-      }
+        ).innerText = `Total Amount ${message.data}`;
+      };
+
+      // $("#totalAmount").removeClass("active");
     } catch (err) {
       console.log(err);
     }
@@ -315,7 +313,6 @@
         $("#addLoader").removeClass("lds-ellipsis");
         $("#addModelCloseButton").attr("disabled", false);
       } else {
-        getTotalAmount();
         state.tablePage = 1;
         if (state.querySet) {
           state.querySet.unshift(data);

@@ -4,9 +4,13 @@ const inputValidator = require("../middelware/inputValidator");
 
 const maxAge = 3 * 24 * 60 * 60;
 module.exports.jwt_token_generator = (id) => {
-  return jwt.sign({ id }, process.env.JWTSECRECT, {
-    expiresIn: maxAge,
-  });
+  return jwt.sign(
+    { userId: id, clientId: Date.now() },
+    process.env.JWTSECRECT,
+    {
+      expiresIn: maxAge,
+    }
+  );
 };
 
 module.exports.require_authentication = async (req, res, next) => {
@@ -27,7 +31,8 @@ module.exports.require_authentication = async (req, res, next) => {
           });
           throw Error(err);
         } else {
-          req.params.userId = decodedToken.id;
+          req.params.userId = decodedToken.userId;
+          req.params.clientUniqueId = decodedToken.clientId;
           next();
         }
       });

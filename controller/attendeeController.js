@@ -67,6 +67,7 @@ module.exports.create_new_attendee = async (req, res) => {
       });
       const { AttendeeName, AttendeeAmount, AttendeeCity, _id } =
         await attendee.save();
+      writeData(req.params.userId);
       res.status(201).json({ AttendeeName, AttendeeAmount, AttendeeCity, _id });
     }
   } catch (err) {
@@ -89,6 +90,7 @@ module.exports.update_one_attendee = async (req, res) => {
       attendee.AttendeeCity = req.body.AttendeeCity;
       const { AttendeeName, AttendeeAmount, AttendeeCity, _id } =
         await attendee.save();
+      writeData(req.params.userId);
       res.status(200).json({ AttendeeName, AttendeeAmount, AttendeeCity, _id });
     }
   } catch (err) {
@@ -110,10 +112,13 @@ module.exports.delete_one_attendee = async (req, res) => {
         _id: req.body.AttendeeId,
         AttendeeUser: req.params.userId,
       });
-      if (deletedCount >= 1)
+      if (deletedCount >= 1) {
+        writeData(req.params.userId);
         return res
           .status(200)
           .json({ message: `${deletedCount} attendee deleted` });
+      }
+
       err = JSON.stringify({
         type: "m",
         statusCode: 404,
@@ -127,25 +132,60 @@ module.exports.delete_one_attendee = async (req, res) => {
 };
 
 //
+const maxAge = 3 * 24 * 60 * 60;
+let clients = [];
+async function findTotalamount(userId) {
+  const totalAmount = await Attendee.aggregate([
+    { $match: { AttendeeUser: userId } },
+    {
+      $group: {
+        _id: null,
+        userTotalAmount: { $sum: "$AttendeeAmount" },
+      },
+    },
+  ]);
+  return totalAmount;
+}
 module.exports.user_total_amount = async (req, res) => {
   try {
-    const totalAmount = await Attendee.aggregate([
-      { $match: { AttendeeUser: req.params.userId } },
-      {
-        $group: {
-          _id: null,
-          userTotalAmount: { $sum: "$AttendeeAmount" },
-        },
-      },
-    ]);
-    if (totalAmount.length == 0)
-      return res.status(200).json({ totalAmount: 0 });
-    res.status(200).json({ totalAmount: totalAmount[0].userTotalAmount });
+    res.setHeader("Content-type", "text/event-stream");
+    req.params.clientId = Date.now();
+    const newClient = {
+      userId: req.params.userId,
+      clientUniqueId: req.params.clientUniqueId,
+      clientId: req.params.clientId,
+      res,
+    };
+    clients.push(newClient);
+    //console.log(clients);
+    writeData(req.params.userId);
+    //if (totalAmount.length == 0)
+    //return res.status(200).json({ totalAmount: 0 });
+    //res.status(200).json({ totalAmount: totalAmount[0].userTotalAmount });
+
+    req.on("close", () => {
+      console.log(`${req.params.clientId} Connection closed`);
+      clients = clients.filter(
+        (client) => client.clientId !== req.params.clientId
+      );
+      // console.log(clients);
+    });
   } catch (err) {
     inputValidator.error_handler(err, req, res);
   }
 };
 
+async function writeData(userId) {
+  selctiveClient = clients.filter((client) => client.userId === userId);
+  selctiveClient.forEach(async (client) => {
+    const totalAmount = await findTotalamount(client.userId);
+    if (totalAmount.length == 0) {
+      client.res.write("data: " + `${0}\n\n`);
+    } else {
+      client.res.write("data: " + `${totalAmount[0].userTotalAmount}\n\n`);
+    }
+  });
+}
 //search attendee by name
 module.exports.search_attendee_name = async (req, res) => {
   try {
