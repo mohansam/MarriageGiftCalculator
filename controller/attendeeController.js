@@ -67,7 +67,7 @@ module.exports.create_new_attendee = async (req, res) => {
       });
       const { AttendeeName, AttendeeAmount, AttendeeCity, _id } =
         await attendee.save();
-      writeData(req.params.userId);
+      await updateTotalamount(req.params.userId);
       res.status(201).json({ AttendeeName, AttendeeAmount, AttendeeCity, _id });
     }
   } catch (err) {
@@ -90,7 +90,7 @@ module.exports.update_one_attendee = async (req, res) => {
       attendee.AttendeeCity = req.body.AttendeeCity;
       const { AttendeeName, AttendeeAmount, AttendeeCity, _id } =
         await attendee.save();
-      writeData(req.params.userId);
+      await updateTotalamount(req.params.userId);
       res.status(200).json({ AttendeeName, AttendeeAmount, AttendeeCity, _id });
     }
   } catch (err) {
@@ -132,9 +132,8 @@ module.exports.delete_one_attendee = async (req, res) => {
 };
 
 //
-const maxAge = 3 * 24 * 60 * 60;
 let clients = [];
-async function findTotalamount(userId) {
+async function updateTotalamount(userId) {
   const totalAmount = await Attendee.aggregate([
     { $match: { AttendeeUser: userId } },
     {
@@ -144,8 +143,10 @@ async function findTotalamount(userId) {
       },
     },
   ]);
-  return totalAmount;
+  if (totalAmount.length == 0) writeData(req.params.userId, totalAmount);
+  pushData(userId, totalAmount[0].userTotalAmount);
 }
+
 module.exports.user_total_amount = async (req, res) => {
   try {
     res.setHeader("Content-type", "text/event-stream");
@@ -157,8 +158,9 @@ module.exports.user_total_amount = async (req, res) => {
       res,
     };
     clients.push(newClient);
-    //console.log(clients);
-    writeData(req.params.userId);
+    console.log(clients);
+    await updateTotalamount(req.params.userId);
+
     //if (totalAmount.length == 0)
     //return res.status(200).json({ totalAmount: 0 });
     //res.status(200).json({ totalAmount: totalAmount[0].userTotalAmount });
@@ -168,22 +170,17 @@ module.exports.user_total_amount = async (req, res) => {
       clients = clients.filter(
         (client) => client.clientId !== req.params.clientId
       );
-      // console.log(clients);
+      console.log(clients);
     });
   } catch (err) {
     inputValidator.error_handler(err, req, res);
   }
 };
 
-async function writeData(userId) {
+async function pushData(userId, totalAmount) {
   selctiveClient = clients.filter((client) => client.userId === userId);
   selctiveClient.forEach(async (client) => {
-    const totalAmount = await findTotalamount(client.userId);
-    if (totalAmount.length == 0) {
-      client.res.write("data: " + `${0}\n\n`);
-    } else {
-      client.res.write("data: " + `${totalAmount[0].userTotalAmount}\n\n`);
-    }
+    client.res.write("data: " + `${totalAmount}\n\n`);
   });
 }
 //search attendee by name
